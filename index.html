@@ -145,6 +145,28 @@ tbody tr:hover{background:#f8fafd}
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;z-index:999;transition:.3s;opacity:0;pointer-events:none}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* PASSWORD LOCK SCREEN */
+#pin-screen{position:fixed;inset:0;background:var(--navy);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+#pin-screen.hidden{display:none}
+.pin-logo{font-size:52px;margin-bottom:12px}
+.pin-title{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px;font-family:'DM Sans',sans-serif;text-align:center}
+.pin-sub{font-size:13px;color:#8ba5c0;margin-bottom:32px;font-family:'DM Sans',sans-serif;text-align:center}
+.pw-wrap{position:relative;width:100%;max-width:320px;margin-bottom:16px}
+.pw-input{width:100%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;color:#fff;font-size:16px;padding:14px 48px 14px 16px;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
+.pw-input:focus{border-color:var(--blue);background:rgba(26,111,196,.15)}
+.pw-input::placeholder{color:#8ba5c0}
+.pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:#8ba5c0;cursor:pointer;font-size:18px;padding:4px}
+.pw-toggle:hover{color:#fff}
+.pw-btn{width:100%;max-width:320px;background:var(--blue);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;padding:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s;margin-bottom:8px}
+.pw-btn:hover{background:#155fa0}
+.pw-btn:active{transform:scale(.98)}
+.pw-shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pin-error{color:#ef9a9a;font-size:13px;margin-top:4px;min-height:20px;font-family:'DM Sans',sans-serif;text-align:center;width:100%;max-width:320px}
+.pin-forgot{color:#8ba5c0;font-size:12px;margin-top:16px;cursor:pointer;text-decoration:underline;font-family:'DM Sans',sans-serif}
+.lock-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:7px 13px;border-radius:7px;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}
+.lock-btn:hover{background:rgba(255,255,255,.18)}
+
 @media(max-width:600px){
   header{padding:12px 14px}
   main{padding:12px}
@@ -154,6 +176,21 @@ tbody tr:hover{background:#f8fafd}
 </style>
 </head>
 <body>
+<!-- PASSWORD LOCK SCREEN -->
+<div id="pin-screen">
+  <div class="pin-logo">🔐</div>
+  <div class="pin-title">Blessd Cargo Movers</div>
+  <div class="pin-sub">Enter your password to continue</div>
+  <div class="pw-wrap">
+    <input class="pw-input" id="pw-input" type="password" placeholder="Enter password…"
+      onkeydown="if(event.key==='Enter')checkPassword()">
+    <button class="pw-toggle" onclick="togglePwVisibility()" id="pw-toggle-btn">👁</button>
+  </div>
+  <button class="pw-btn" onclick="checkPassword()">Unlock →</button>
+  <div class="pin-error" id="pin-error"></div>
+  <div class="pin-forgot" onclick="pinForgot()">Forgot password?</div>
+</div>
+
 <div class="app">
 
 <header>
@@ -169,6 +206,7 @@ tbody tr:hover{background:#f8fafd}
       <span class="dot" id="sync-dot"></span>
       <span id="sync-label">Sync</span>
     </button>
+    <button class="lock-btn" onclick="lockApp()" title="Lock app">🔒</button>
     <button class="btn btn-primary btn-sm" onclick="showTab('add')">+ New</button>
   </div>
 </header>
@@ -341,10 +379,104 @@ const STATUS_ORDER = ['Awaiting Pickup','Collected','Loaded','At Border','In Tra
 const PAY_CLS  = {Paid:'b-paid',COD:'b-cod',Pending:'b-pending'};
 const STAT_CLS = {'Awaiting Pickup':'b-waiting','Collected':'b-collected','Loaded':'b-loaded','At Border':'b-border','In Transit':'b-transit','Arrived':'b-arrived','Delivered':'b-delivered'};
 
-// ── Boot ────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+//  PASSWORD SECURITY
+//  Change your password by updating CORRECT_PASSWORD below
+//  Use a mix of letters, numbers and symbols for best security
+//  Example: BlessdCargo@2026
+// ══════════════════════════════════════════════════════════
+const CORRECT_PASSWORD = 'Mgwali@19!';
+const SESSION_KEY      = 'bcm_session';
+const SESSION_HOURS    = 8;
+
+let pwAttempts = 0;
+const MAX_ATTEMPTS = 5;
+
+function checkSession() {
+  try {
+    const s = localStorage.getItem(SESSION_KEY);
+    if (!s) return false;
+    const { time } = JSON.parse(s);
+    return (Date.now() - time) / 3600000 < SESSION_HOURS;
+  } catch(e) { return false; }
+}
+
+function startSession() {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ time: Date.now() }));
+}
+
+function lockApp() {
+  localStorage.removeItem(SESSION_KEY);
+  pwAttempts = 0;
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pin-error').textContent = '';
+  document.getElementById('pin-screen').classList.remove('hidden');
+  setTimeout(() => document.getElementById('pw-input').focus(), 100);
+}
+
+function togglePwVisibility() {
+  const input = document.getElementById('pw-input');
+  const btn   = document.getElementById('pw-toggle-btn');
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁'; }
+}
+
+function checkPassword() {
+  const input   = document.getElementById('pw-input');
+  const errEl   = document.getElementById('pin-error');
+  const entered = input.value;
+
+  if (!entered) { errEl.textContent = 'Please enter your password.'; return; }
+
+  if (entered === CORRECT_PASSWORD) {
+    startSession();
+    document.getElementById('pin-screen').classList.add('hidden');
+    errEl.textContent = '';
+    pwAttempts = 0;
+    input.value = '';
+    syncAll();
+  } else {
+    pwAttempts++;
+    input.value = '';
+
+    // Shake the input
+    input.classList.remove('pw-shake');
+    void input.offsetWidth;
+    input.classList.add('pw-shake');
+    setTimeout(() => input.classList.remove('pw-shake'), 400);
+
+    if (pwAttempts >= MAX_ATTEMPTS) {
+      errEl.textContent = 'Too many attempts. Locked for 30 seconds.';
+      document.getElementById('pw-input').disabled = true;
+      document.querySelector('.pw-btn').disabled = true;
+      setTimeout(() => {
+        pwAttempts = 0;
+        document.getElementById('pw-input').disabled = false;
+        document.querySelector('.pw-btn').disabled = false;
+        errEl.textContent = '';
+        document.getElementById('pw-input').focus();
+      }, 30000);
+    } else {
+      const left = MAX_ATTEMPTS - pwAttempts;
+      errEl.textContent = `Wrong password. ${left} attempt${left !== 1 ? 's' : ''} left.`;
+      document.getElementById('pw-input').focus();
+    }
+  }
+}
+
+function pinForgot() {
+  alert('To reset your password:\n\n1. Go to github.com/BlessingMgwali/bcm-app\n2. Click index.html → pencil icon to edit\n3. Find this line:\n   const CORRECT_PASSWORD\n4. Change the password inside the quotes\n5. Click Commit changes\n\nTip: Use a mix of letters, numbers and symbols.\nExample: BlessdCargo@2026');
+}
+
+// ── Boot with password check ─────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  syncAll();
-  setInterval(() => { if (!document.hidden) syncAll(); }, 60000);
+  if (checkSession()) {
+    document.getElementById('pin-screen').classList.add('hidden');
+    syncAll();
+  } else {
+    setTimeout(() => document.getElementById('pw-input').focus(), 100);
+  }
+  setInterval(() => { if (!document.hidden && checkSession()) syncAll(); }, 60000);
 });
 
 // ── API ─────────────────────────────────────────────────────
