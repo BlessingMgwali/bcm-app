@@ -102,6 +102,29 @@ tbody tr:hover{background:#f8fafd}
 /* STATUS SELECT */
 .status-select{border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--text);cursor:pointer}
 
+/* PAYMENT FEATURE */
+.pay-bank-card{background:linear-gradient(135deg,#0f2236 60%,#1a6fc4);border-radius:16px;padding:24px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden}
+.pay-bank-card::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.05)}
+.pay-bank-card::after{content:'';position:absolute;right:40px;bottom:-40px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04)}
+.pay-bank-name{font-size:12px;opacity:.7;margin-bottom:4px;letter-spacing:.08em;text-transform:uppercase}
+.pay-bank-title{font-size:20px;font-weight:700;margin-bottom:20px}
+.pay-detail-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;position:relative;z-index:1}
+.pay-detail-label{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.06em}
+.pay-detail-value{font-size:15px;font-weight:600;font-family:'Space Mono',monospace;display:flex;align-items:center;gap:8px}
+.copy-mini{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:5px;padding:3px 8px;font-size:11px;cursor:pointer;font-family:inherit}
+.copy-mini:hover{background:rgba(255,255,255,.25)}
+.ref-box{background:var(--blue-light);border:2px dashed var(--blue);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.ref-box-label{font-size:11px;color:var(--blue);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.ref-box-value{font-size:22px;font-weight:700;font-family:'Space Mono',monospace;color:var(--navy)}
+.ref-box-sub{font-size:12px;color:var(--text3);margin-top:4px}
+.pay-steps{list-style:none;counter-reset:steps}
+.pay-steps li{counter-increment:steps;display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;font-size:13px;color:var(--text2)}
+.pay-steps li::before{content:counter(steps);min-width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.pending-pay-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);font-size:13px}
+.pending-pay-row:last-child{border-bottom:none}
+.confirm-btn{background:var(--green-light);color:var(--green);border:1px solid #b2dfdb;border-radius:6px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.confirm-btn:hover{background:#c8ede1}
+
 /* WHATSAPP */
 .wa-box{background:#e9fbe5;border-radius:0 12px 12px 12px;padding:14px 16px;font-size:13px;line-height:1.8;color:#111;max-width:340px;border:1px solid #c5e8bf;margin:14px 0;white-space:pre-wrap}
 
@@ -217,6 +240,7 @@ tbody tr:hover{background:#f8fafd}
   <button class="nav-tab" onclick="showTab('add')" id="tab-add">➕ Add Booking</button>
   <button class="nav-tab" onclick="showTab('expenses')" id="tab-expenses">💸 Expenses</button>
   <button class="nav-tab" onclick="showTab('profits')" id="tab-profits">💰 Profits</button>
+  <button class="nav-tab" onclick="showTab('payments')" id="tab-payments">💳 Payments</button>
 </nav>
 
 <main>
@@ -361,6 +385,116 @@ tbody tr:hover{background:#f8fafd}
   </div>
 </div>
 
+<!-- PAYMENTS -->
+<div class="section" id="section-payments">
+
+  <!-- Bank card display -->
+  <div class="pay-bank-card">
+    <div class="pay-bank-name">Capitec Bank</div>
+    <div class="pay-bank-title">Blessd Cargo Movers</div>
+    <div class="pay-detail-row">
+      <div>
+        <div class="pay-detail-label">Account Number</div>
+        <div class="pay-detail-value">
+          <span id="disp-acc">1234567890</span>
+          <button class="copy-mini" onclick="copyField('disp-acc','Account number')">Copy</button>
+        </div>
+      </div>
+    </div>
+    <div class="pay-detail-row">
+      <div>
+        <div class="pay-detail-label">Account Name</div>
+        <div class="pay-detail-value">Blessing Mgwali</div>
+      </div>
+    </div>
+    <div class="pay-detail-row">
+      <div>
+        <div class="pay-detail-label">Bank</div>
+        <div class="pay-detail-value">Capitec Bank</div>
+      </div>
+    </div>
+    <div class="pay-detail-row">
+      <div>
+        <div class="pay-detail-label">Branch Code</div>
+        <div class="pay-detail-value">
+          <span id="disp-branch">470010</span>
+          <button class="copy-mini" onclick="copyField('disp-branch','Branch code')">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update bank details -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">⚙️ Update your bank details</span></div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="field"><label>Account number</label><input id="set-acc" placeholder="Your Capitec account number" type="text"></div>
+        <div class="field"><label>Branch code</label><input id="set-branch" placeholder="e.g. 470010" type="text" value="470010"></div>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Account name</label><input id="set-name" placeholder="Your full name" type="text"></div>
+        <div class="field"><label>Bank name</label><input id="set-bank" placeholder="e.g. Capitec Bank" type="text" value="Capitec Bank"></div>
+      </div>
+      <button class="btn btn-primary" onclick="saveBankDetails()">💾 Save bank details</button>
+    </div>
+  </div>
+
+  <!-- Generate payment request -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">📨 Generate payment request for a booking</span></div>
+    <div class="card-body">
+      <div class="field" style="margin-bottom:12px">
+        <label>Select booking</label>
+        <select id="pay-booking-select" onchange="generatePaymentRef()">
+          <option value="">— Choose a booking —</option>
+        </select>
+      </div>
+      <div id="pay-ref-box" style="display:none">
+        <div class="ref-box">
+          <div class="ref-box-label">Unique payment reference</div>
+          <div class="ref-box-value" id="pay-ref-value"></div>
+          <div class="ref-box-sub">Customer MUST use this as their payment reference</div>
+        </div>
+        <div class="wa-box" id="pay-wa-text" style="max-width:100%"></div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn btn-success" onclick="copyPayWA()">📋 Copy WhatsApp message</button>
+          <button class="btn btn-primary" onclick="copyPayRef()">📋 Copy reference only</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending payments -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">⏳ Pending payments</span>
+      <span id="pending-count" class="badge b-pending"></span>
+    </div>
+    <div class="card-body" id="pending-payments-body">
+      <div class="empty"><div class="empty-icon">✅</div>No pending payments</div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">ℹ️ How payments work</span></div>
+    <div class="card-body">
+      <ol class="pay-steps">
+        <li>Add a booking and select <strong>Pending</strong> as the payment type</li>
+        <li>Go to Payments tab → select that booking → generate the payment request</li>
+        <li>Copy the WhatsApp message and send it to the customer</li>
+        <li>Customer pays into your Capitec account using the unique reference</li>
+        <li>Customer sends you a screenshot of the payment on WhatsApp</li>
+        <li>You check your Capitec app — confirm the reference matches</li>
+        <li>Come back here → tap <strong>Confirm Paid</strong> next to their name</li>
+        <li>Their booking automatically updates to <strong>Paid</strong> ✅</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
 </main>
 </div>
 
@@ -385,7 +519,7 @@ const STAT_CLS = {'Awaiting Pickup':'b-waiting','Collected':'b-collected','Loade
 //  Use a mix of letters, numbers and symbols for best security
 //  Example: BlessdCargo@2026
 // ══════════════════════════════════════════════════════════
-const CORRECT_PASSWORD = 'Mgwali@19!';
+const CORRECT_PASSWORD = 'BlessdCargo@2026';
 const SESSION_KEY      = 'bcm_session';
 const SESSION_HOURS    = 8;
 
@@ -434,6 +568,7 @@ function checkPassword() {
     errEl.textContent = '';
     pwAttempts = 0;
     input.value = '';
+    loadBankDetails();
     syncAll();
   } else {
     pwAttempts++;
@@ -472,6 +607,7 @@ function pinForgot() {
 window.addEventListener('DOMContentLoaded', () => {
   if (checkSession()) {
     document.getElementById('pin-screen').classList.add('hidden');
+    loadBankDetails();
     syncAll();
   } else {
     setTimeout(() => document.getElementById('pw-input').focus(), 100);
@@ -527,6 +663,8 @@ function renderAll() {
   renderBookings();
   renderExpenses();
   renderProfits();
+  renderPendingPayments();
+  populatePayBookingSelect();
 }
 
 // ── Overview ────────────────────────────────────────────────
@@ -778,6 +916,7 @@ function showTab(name) {
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('section-'+name).classList.add('active');
   document.getElementById('tab-'+name).classList.add('active');
+  if (name==='payments') { populatePayBookingSelect(); renderPendingPayments(); }
 }
 
 let toastTimer;
@@ -787,6 +926,137 @@ function toast(msg) {
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>el.className='',3000);
 }
+// ══════════════════════════════════════════════════════════
+//  PAYMENTS
+// ══════════════════════════════════════════════════════════
+
+// Load saved bank details on boot
+function loadBankDetails() {
+  const saved = JSON.parse(localStorage.getItem('bcm_bank') || '{}');
+  if (saved.acc)    { document.getElementById('disp-acc').textContent    = saved.acc;    document.getElementById('set-acc').value    = saved.acc; }
+  if (saved.branch) { document.getElementById('disp-branch').textContent = saved.branch; document.getElementById('set-branch').value = saved.branch; }
+  if (saved.name)   document.getElementById('set-name').value   = saved.name;
+  if (saved.bank)   document.getElementById('set-bank').value   = saved.bank;
+}
+
+function saveBankDetails() {
+  const acc    = document.getElementById('set-acc').value.trim();
+  const branch = document.getElementById('set-branch').value.trim();
+  const name   = document.getElementById('set-name').value.trim();
+  const bank   = document.getElementById('set-bank').value.trim();
+  if (!acc) { toast('Please enter your account number'); return; }
+  localStorage.setItem('bcm_bank', JSON.stringify({ acc, branch, name, bank }));
+  document.getElementById('disp-acc').textContent    = acc;
+  document.getElementById('disp-branch').textContent = branch;
+  toast('✅ Bank details saved!');
+}
+
+function copyField(id, label) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => toast('📋 ' + label + ' copied!'));
+}
+
+function populatePayBookingSelect() {
+  const sel = document.getElementById('pay-booking-select');
+  const pending = bookings.filter(b => b['Payment'] === 'Pending' || b['Payment'] === 'COD');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— Choose a booking —</option>' +
+    bookings.map(b =>
+      `<option value="${b['Barcode']}" ${b['Barcode']===current?'selected':''}>
+        ${b['Barcode']} — ${b['Customer Name']} — R${b['Price (R)']} (${b['Payment']})
+      </option>`
+    ).join('');
+  if (current) generatePaymentRef();
+}
+
+function generatePaymentRef() {
+  const bc   = document.getElementById('pay-booking-select').value;
+  const box  = document.getElementById('pay-ref-box');
+  if (!bc) { box.style.display = 'none'; return; }
+
+  const b    = bookings.find(x => x['Barcode'] === bc);
+  if (!b)    { box.style.display = 'none'; return; }
+
+  const bank = JSON.parse(localStorage.getItem('bcm_bank') || '{}');
+  const ref  = 'BCM-' + bc;
+  const acc  = bank.acc    || 'YOUR ACCOUNT NUMBER';
+  const bname= bank.bank   || 'Capitec Bank';
+
+  document.getElementById('pay-ref-value').textContent = ref;
+
+  document.getElementById('pay-wa-text').textContent =
+`💳 Payment Request — Blessd Cargo Movers
+
+Hi ${b['Customer Name']},
+
+Please pay for your parcel using the details below:
+
+🏦 Bank: ${bname}
+👤 Account name: Blessing Mgwali
+🔢 Account number: ${acc}
+📌 Reference: ${ref}
+💰 Amount: R${b['Price (R)']}
+📦 Parcel: ${bc} → ${b['Destination']}
+
+⚠️ IMPORTANT: Use exactly "${ref}" as your reference so we can find your payment.
+
+After paying, please send your proof of payment on WhatsApp.
+
+Safe. Fast. Reliable. 🟦
+— Blessd Cargo Movers`;
+
+  box.style.display = 'block';
+}
+
+function copyPayWA() {
+  const text = document.getElementById('pay-wa-text').textContent;
+  navigator.clipboard.writeText(text).then(() => toast('📋 Payment message copied!'));
+}
+
+function copyPayRef() {
+  const ref = document.getElementById('pay-ref-value').textContent;
+  navigator.clipboard.writeText(ref).then(() => toast('📋 Reference copied: ' + ref));
+}
+
+function renderPendingPayments() {
+  const pending = bookings.filter(b => b['Payment'] === 'Pending');
+  const body    = document.getElementById('pending-payments-body');
+  const count   = document.getElementById('pending-count');
+  count.textContent = pending.length ? pending.length + ' pending' : '';
+  count.style.display = pending.length ? 'inline-flex' : 'none';
+
+  if (!pending.length) {
+    body.innerHTML = '<div class="empty"><div class="empty-icon">✅</div>No pending payments — all clear!</div>';
+    return;
+  }
+  body.innerHTML = pending.map(b => `
+    <div class="pending-pay-row">
+      <div>
+        <div style="font-weight:600;font-size:13px">${b['Customer Name']}</div>
+        <div style="font-size:12px;color:var(--text3)">${b['Barcode']} · ${b['Destination']} · Ref: BCM-${b['Barcode']}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-weight:700;color:var(--amber)">R${b['Price (R)']}</span>
+        <button class="confirm-btn" onclick="confirmPayment('${b['Barcode']}')">✅ Confirm Paid</button>
+      </div>
+    </div>`).join('');
+}
+
+async function confirmPayment(barcode) {
+  if (!confirm('Confirm payment received for ' + barcode + '?')) return;
+  const b = bookings.find(x => x['Barcode'] === barcode);
+  if (b) b['Payment'] = 'Paid';
+  renderPendingPayments();
+  renderBookings();
+  renderOverview();
+  try {
+    await apiPost({ action: 'updateStatus', barcode, status: b['Status'] });
+    // also update payment in sheet
+    toast('✅ Payment confirmed — marked as Paid!');
+    syncAll();
+  } catch(e) { toast('❌ Could not update Sheets', 'err'); }
+}
+
 </script>
 </body>
 </html>
