@@ -160,6 +160,34 @@ tbody tr:hover{background:#FAFBFD}
 .pub-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .pub-url{font-family:'Space Mono',monospace;font-size:12px;color:#fff;word-break:break-all;margin-bottom:10px;line-height:1.6}
 .pub-sub{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:12px}
+/* PAYMENTS & MODAL */
+.pending-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:12px}
+.pending-row:last-child{border-bottom:none}
+.pending-info{flex:1;min-width:0}
+.pending-name{font-weight:700;font-size:13px;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pending-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.pending-amt{font-weight:700;font-family:'Space Mono',monospace;color:var(--gold);font-size:14px;flex-shrink:0}
+.confirm-pay-btn{background:var(--green-light);color:var(--green);border:1px solid #A8D5C2;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;white-space:nowrap}
+.confirm-pay-btn:hover{background:#c8ede1}
+.view-btn{background:var(--gold-light);color:#7A5A00;border:1px solid var(--gold-border);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0}
+.view-btn:hover{background:#f5e9c8}
+/* Modal */
+#booking-modal{position:fixed;inset:0;background:rgba(13,31,53,.6);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
+#booking-modal.open{display:flex}
+.modal-box{background:var(--card);border-radius:12px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(13,31,53,.3);border:1px solid var(--border)}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to right,var(--navy),var(--navy2));border-radius:12px 12px 0 0}
+.modal-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff}
+.modal-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(255,255,255,.2)}
+.modal-body{padding:20px}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.detail-row:last-child{border-bottom:none}
+.detail-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
+.detail-value{font-weight:600;color:var(--navy);text-align:right;max-width:65%}
+.modal-actions{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap}
+.outstanding-banner{background:var(--red-light);border:1px solid #EDBBBB;border-left:4px solid var(--red);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.ob-label{font-size:12px;color:var(--red);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.ob-amount{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--red)}
 @media(max-width:600px){header{padding:0 16px;height:58px}nav{top:58px}main{padding:16px}.metrics{grid-template-columns:1fr 1fr}.metric-value{font-size:20px}}
 </style>
 </head>
@@ -203,6 +231,7 @@ tbody tr:hover{background:#FAFBFD}
   <button class="nav-tab" onclick="showTab('profits')" id="tab-profits">💰 Profits</button>
   <button class="nav-tab" onclick="showTab('bulk')" id="tab-bulk">📢 Bulk Updates</button>
   <button class="nav-tab" onclick="showTab('trips')" id="tab-trips">🗓 Trip Dates</button>
+  <button class="nav-tab" onclick="showTab('payments')" id="tab-payments">💳 Payments</button>
 </nav>
 
 <main>
@@ -457,13 +486,73 @@ tbody tr:hover{background:#FAFBFD}
   </div>
 </div>
 
+<!-- PAYMENTS -->
+<div class="section" id="section-payments">
+  <div class="page-title">Payment Control</div>
+
+  <!-- Outstanding banner -->
+  <div class="outstanding-banner" id="outstanding-banner">
+    <div>
+      <div class="ob-label">Total Outstanding</div>
+      <div style="font-size:12px;color:var(--red);margin-top:2px">Pending + COD not yet collected</div>
+    </div>
+    <div class="ob-amount" id="outstanding-total">R0</div>
+  </div>
+
+  <!-- Pending payments -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Pending Payments</span>
+      <span class="badge b-pending" id="pending-count" style="display:none"></span>
+    </div>
+    <div class="card-body" id="pending-list">
+      <div class="empty"><div class="empty-icon">✅</div>No pending payments</div>
+    </div>
+  </div>
+
+  <!-- COD to collect -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">COD — To Collect on Delivery</span>
+      <span class="badge b-cod" id="cod-count" style="display:none"></span>
+    </div>
+    <div class="card-body" id="cod-list">
+      <div class="empty"><div class="empty-icon">📦</div>No COD bookings</div>
+    </div>
+  </div>
+
+  <!-- All paid -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Confirmed Paid</span>
+      <span class="badge b-paid" id="paid-count" style="display:none"></span>
+    </div>
+    <div class="card-body" id="paid-list">
+      <div class="empty"><div class="empty-icon">💰</div>No paid bookings yet</div>
+    </div>
+  </div>
+</div>
+
 </main>
 </div>
+
+<!-- BOOKING DETAIL MODAL -->
+<div id="booking-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Booking Details</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 const SCRIPT_URL       = 'https://script.google.com/macros/s/AKfycbxOuXTABQYtV1nQElDATErXeRF5UNceNViEaCT1PKi0pZZ6qRcWtrUV4bEDqxZA7FH_/exec';
-const CORRECT_PASSWORD = 'Mgwali@19!';
+const CORRECT_PASSWORD = 'BlessdCargo@2026';
 const SESSION_KEY      = 'bcm_session';
 const SESSION_HOURS    = 8;
 const MAX_ATTEMPTS     = 5;
@@ -518,7 +607,7 @@ async function syncAll(){
   catch(e){setSyncState('err');toast('❌ Sync failed — check connection')}
 }
 function setSyncState(s){const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');d.className='dot'+(s==='loading'?' spin':s==='err'?' err':'');l.textContent=s==='loading'?'Syncing…':s==='err'?'Error':'Synced'}
-function renderAll(){renderOverview();renderBookings();renderExpenses();renderProfits()}
+function renderAll(){renderOverview();renderBookings();renderExpenses();renderProfits();renderPayments()}
 function fmt(v){return'R'+Math.round(Number(v)||0).toLocaleString('en-ZA')}
 
 // ── Overview ──────────────────────────────────────────────
@@ -711,6 +800,172 @@ function openPubPage(){
   const url = window.location.origin + window.location.pathname.replace('index.html','') + 'book.html';
   window.open(url,'_blank');
 }
+
+// ── Nav ───────────────────────────────────────────────────
+function showTab(name){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='bulk')renderBulkList();
+  if(name==='trips')renderTripDates();
+  if(name==='payments')renderPayments();
+}
+
+// ══════════════════════════════════════════════════════════
+//  PAYMENTS
+// ══════════════════════════════════════════════════════════
+function renderPayments(){
+  const pending  = bookings.filter(b=>b['Payment']==='Pending');
+  const cod      = bookings.filter(b=>b['Payment']==='COD');
+  const paid     = bookings.filter(b=>b['Payment']==='Paid');
+  const outstanding = [...pending,...cod].reduce((s,b)=>s+(parseFloat(b['Price (R)'])||0),0);
+
+  // Banner
+  document.getElementById('outstanding-total').textContent = fmt(outstanding);
+  document.getElementById('outstanding-banner').style.borderLeftColor = outstanding>0?'var(--red)':'var(--green)';
+  document.getElementById('outstanding-banner').style.background = outstanding>0?'var(--red-light)':'var(--green-light)';
+  document.getElementById('outstanding-total').style.color = outstanding>0?'var(--red)':'var(--green)';
+
+  // Pending count badge
+  const pc = document.getElementById('pending-count');
+  pc.textContent = pending.length+' unpaid'; pc.style.display = pending.length?'inline-flex':'none';
+
+  // COD count badge
+  const cc = document.getElementById('cod-count');
+  cc.textContent = cod.length+' COD'; cc.style.display = cod.length?'inline-flex':'none';
+
+  // Paid count badge
+  const padc = document.getElementById('paid-count');
+  padc.textContent = paid.length+' paid'; padc.style.display = paid.length?'inline-flex':'none';
+
+  renderPaymentList('pending-list', pending, 'pending');
+  renderPaymentList('cod-list', cod, 'cod');
+  renderPaymentList('paid-list', paid, 'paid');
+}
+
+function renderPaymentList(elId, list, type){
+  const el = document.getElementById(elId);
+  if(!list.length){
+    const icons = {pending:'✅', cod:'📦', paid:'💰'};
+    const msgs  = {pending:'No pending payments — all clear!', cod:'No COD bookings', paid:'No paid bookings yet'};
+    el.innerHTML=`<div class="empty"><div class="empty-icon">${icons[type]}</div>${msgs[type]}</div>`;
+    return;
+  }
+  el.innerHTML = list.map(b=>`
+    <div class="pending-row">
+      <div class="pending-info">
+        <div class="pending-name">${b['Customer Name']||''}</div>
+        <div class="pending-sub">${b['Barcode']||''} · ${b['Destination']||''} · ${b['Weight (kg)']||''}kg</div>
+      </div>
+      <div class="pending-amt">R${b['Price (R)']||0}</div>
+      <button class="view-btn" onclick="openModal('${b['Barcode']}')">View</button>
+      ${type!=='paid'?`<button class="confirm-pay-btn" onclick="confirmPaid('${b['Barcode']}')">✅ Mark Paid</button>`:''}
+    </div>`).join('');
+}
+
+async function confirmPaid(barcode){
+  if(!confirm('Confirm payment received for '+barcode+'?')) return;
+  const b = bookings.find(x=>x['Barcode']===barcode);
+  if(!b) return;
+  b['Payment'] = 'Paid';
+  renderPayments();
+  renderBookings();
+  renderOverview();
+  try{
+    // Update sheet payment via a status update — we pass a special marker
+    await apiPost({action:'updatePayment', barcode, payment:'Paid'});
+    toast('✅ Payment confirmed — marked as Paid!');
+    syncAll();
+  } catch(e){ toast('⚠️ Updated locally — sync to save to Sheets'); }
+}
+
+// ══════════════════════════════════════════════════════════
+//  BOOKING DETAIL MODAL
+// ══════════════════════════════════════════════════════════
+function openModal(barcode){
+  const b = bookings.find(x=>x['Barcode']===barcode);
+  if(!b) return;
+
+  document.getElementById('modal-title').textContent = b['Barcode'] + ' — ' + (b['Customer Name']||'');
+
+  const fields = [
+    {label:'Customer Name',  value: b['Customer Name']||'—'},
+    {label:'Phone',          value: b['Phone']||'—'},
+    {label:'Destination',    value: b['Destination']||'—'},
+    {label:'Weight',         value: (b['Weight (kg)']||'—')+'kg'},
+    {label:'Price',          value: 'R'+(b['Price (R)']||0)},
+    {label:'Payment',        value: b['Payment']||'—'},
+    {label:'Status',         value: b['Status']||'—'},
+    {label:'Departure Date', value: b['Departure Date']||'—'},
+    {label:'Parcel Contents',value: b['notes']||b['Notes']||'—'},
+    {label:'Booked On',      value: b['Timestamp']?new Date(b['Timestamp']).toLocaleDateString('en-ZA',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—'},
+  ];
+
+  document.getElementById('modal-body').innerHTML = fields.map(f=>`
+    <div class="detail-row">
+      <span class="detail-label">${f.label}</span>
+      <span class="detail-value"><span class="badge ${f.label==='Payment'?(PAY_CLS[f.value]||''):f.label==='Status'?(STAT_CLS[f.value]||''):''}">${f.value}</span></span>
+    </div>`).join('');
+
+  // Actions
+  const isPaid = b['Payment']==='Paid';
+  document.getElementById('modal-actions').innerHTML = `
+    <div style="width:100%">
+      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Update Status</div>
+      <select id="modal-status-sel" style="border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;width:100%;margin-bottom:10px">
+        ${STATUS_ORDER.map(s=>`<option${s===b['Status']?' selected':''}>${s}</option>`).join('')}
+      </select>
+      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;margin-top:6px">Update Payment</div>
+      <select id="modal-pay-sel" style="border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;width:100%;margin-bottom:14px">
+        <option${b['Payment']==='Paid'?' selected':''}>Paid</option>
+        <option${b['Payment']==='COD'?' selected':''}>COD</option>
+        <option${b['Payment']==='Pending'?' selected':''}>Pending</option>
+      </select>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-gold" style="flex:1" onclick="saveModalChanges('${barcode}')">💾 Save Changes</button>
+        <button class="btn btn-danger" style="flex:1" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>`;
+
+  document.getElementById('booking-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+async function saveModalChanges(barcode){
+  const newStatus  = document.getElementById('modal-status-sel').value;
+  const newPayment = document.getElementById('modal-pay-sel').value;
+  const b = bookings.find(x=>x['Barcode']===barcode);
+  if(!b) return;
+
+  const statusChanged  = b['Status']  !== newStatus;
+  const paymentChanged = b['Payment'] !== newPayment;
+
+  b['Status']  = newStatus;
+  b['Payment'] = newPayment;
+
+  closeModal();
+  renderBookings();
+  renderOverview();
+  renderPayments();
+
+  try{
+    if(statusChanged)  await apiPost({action:'updateStatus',  barcode, status:newStatus});
+    if(paymentChanged) await apiPost({action:'updatePayment', barcode, payment:newPayment});
+    toast('✅ Booking updated successfully');
+    syncAll();
+  } catch(e){ toast('⚠️ Updated locally — press Sync to save to Sheets'); }
+}
+
+function closeModal(){
+  document.getElementById('booking-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', e=>{
+  if(e.target.id==='booking-modal') closeModal();
+});
 
 // ── Boot ──────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded',()=>{
