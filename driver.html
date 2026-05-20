@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Driver Update — Blessd Cargo Moves</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --navy:#0D1F35;--gold:#C8962A;--gold-light:#FDF3E0;--gold-border:#E8C97A;
+  --green:#0A6B48;--green-light:#E8F5EF;
+  --red:#9B2335;--red-light:#FDEAEA;
+  --text:#0D1F35;--text2:#3D5068;--text3:#7A90A8;
+  --border:#DDE6F0;--bg:#F5F7FA;--card:#fff;
+}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:#fff;min-height:100vh;font-size:15px;-webkit-font-smoothing:antialiased}
+
+/* LOCK */
+#lock{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+#lock.hidden{display:none}
+.lock-eagle{font-size:52px;margin-bottom:16px}
+.lock-title{font-size:22px;font-weight:700;margin-bottom:4px}
+.lock-sub{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:24px}
+.lock-line{width:48px;height:2px;background:var(--gold);margin:0 auto 24px}
+.pw-wrap{position:relative;width:100%;max-width:300px;margin-bottom:12px}
+.pw-input{width:100%;background:rgba(255,255,255,.08);border:1.5px solid rgba(200,150,42,.3);border-radius:10px;color:#fff;font-size:16px;padding:14px 46px 14px 16px;font-family:'Inter',sans-serif;outline:none}
+.pw-input:focus{border-color:var(--gold)}
+.pw-input::placeholder{color:rgba(255,255,255,.25)}
+.pw-eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);font-size:17px;cursor:pointer;padding:4px}
+.pw-btn{width:100%;max-width:300px;background:var(--gold);border:none;border-radius:10px;color:var(--navy);font-size:14px;font-weight:700;padding:14px;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.pw-btn:active{transform:scale(.97)}
+.pw-err{color:#FF8A80;font-size:12px;margin-top:8px;min-height:18px}
+.pw-shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-8px)}50%{transform:translateX(8px)}}
+
+/* HEADER */
+header{background:rgba(255,255,255,.05);border-bottom:1px solid rgba(200,150,42,.2);padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.hdr-icon{font-size:22px}
+.hdr-title{font-size:15px;font-weight:700}
+.hdr-sub{font-size:10px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-top:1px}
+.hdr-right{display:flex;gap:8px}
+.hdr-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:7px 12px;border-radius:7px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500}
+.hdr-btn:active{transform:scale(.95)}
+.sync-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4CAF50;margin-right:4px;vertical-align:middle}
+.sync-dot.loading{background:var(--gold);animation:blink .7s infinite}
+.sync-dot.err{background:#ef5350}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* MAIN */
+main{padding:16px;max-width:500px;margin:0 auto}
+
+/* STATUS BUTTONS — big and tappable */
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.status-btn{padding:18px 12px;border-radius:10px;border:2px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;letter-spacing:.03em;text-transform:uppercase;transition:.15s;position:relative}
+.status-btn:active{transform:scale(.95)}
+.status-btn.selected{border-color:var(--gold);background:rgba(200,150,42,.2)}
+.status-btn .sb-icon{font-size:26px;display:block;margin-bottom:6px}
+.status-btn .sb-count{position:absolute;top:8px;right:10px;background:var(--gold);color:var(--navy);border-radius:12px;font-size:10px;font-weight:700;padding:2px 6px;min-width:20px;text-align:center}
+
+/* PARCEL LIST */
+.section-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.parcel-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.parcel-info{flex:1;min-width:0}
+.parcel-code{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)}
+.parcel-name{font-size:14px;font-weight:600;color:#fff;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.parcel-dest{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.parcel-current{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;flex-shrink:0}
+.s-collected{background:#E3EEF9;color:#1A5C9E}
+.s-transit{background:#EDE7F6;color:#4527A0}
+.s-border{background:#FFF3E0;color:#E65100}
+.s-delivered{background:#E8F5EF;color:#0A6B48}
+
+/* SELECT ALL BAR */
+.select-all-bar{background:rgba(200,150,42,.15);border:1px solid rgba(200,150,42,.3);border-radius:8px;padding:11px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.sel-left{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--gold)}
+.sel-left input{width:17px;height:17px;accent-color:var(--gold);cursor:pointer}
+.sel-right{font-size:12px;color:rgba(255,255,255,.4)}
+
+/* ACTION PANEL */
+.action-panel{position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:2px solid var(--gold);padding:14px 18px;z-index:50;display:none}
+.action-panel.show{display:block}
+.ap-row{display:flex;gap:10px;margin-bottom:10px}
+.ap-new-status{flex:1;border:1.5px solid rgba(200,150,42,.4);border-radius:8px;padding:11px 12px;font-size:14px;font-family:'Inter',sans-serif;color:#fff;background:rgba(255,255,255,.08);outline:none;appearance:none}
+.ap-new-status:focus{border-color:var(--gold)}
+.ap-new-status option{background:var(--navy);color:#fff}
+.ap-update-btn{background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:11px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.ap-update-btn:active{transform:scale(.97)}
+.ap-msg-btn{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.ap-msg-btn:active{transform:scale(.97)}
+.ap-sel-info{font-size:12px;color:rgba(255,255,255,.4);text-align:center;margin-top:8px}
+
+/* MESSAGE PREVIEW */
+.msg-preview{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px;margin-top:10px;white-space:pre-wrap;font-size:12px;color:rgba(255,255,255,.7);line-height:1.7;display:none;max-height:160px;overflow-y:auto}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:rgba(255,255,255,.3);font-size:13px}
+.empty-icon{font-size:36px;margin-bottom:10px;opacity:.5}
+
+/* TOAST */
+#toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-60px);background:#fff;color:var(--navy);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;transition:.3s;opacity:0;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD LOCK -->
+<div id="lock">
+  <div class="lock-eagle">🦅</div>
+  <div class="lock-title">Driver Portal</div>
+  <div class="lock-line"></div>
+  <div class="lock-sub">Blessd Cargo Moves</div>
+  <div class="pw-wrap">
+    <input class="pw-input" id="pw" type="password" placeholder="Enter password…" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-eye" onclick="togglePw()" id="pw-eye">👁</button>
+  </div>
+  <button class="pw-btn" onclick="checkPw()">Unlock</button>
+  <div class="pw-err" id="pw-err"></div>
+</div>
+
+<header>
+  <div class="hdr-left">
+    <div class="hdr-icon">🚚</div>
+    <div>
+      <div class="hdr-title">Driver Portal</div>
+      <div class="hdr-sub">Status Updates</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <button class="hdr-btn" onclick="syncAll()"><span class="sync-dot" id="sdot"></span><span id="slabel">Sync</span></button>
+  </div>
+</header>
+
+<main>
+  <!-- Status filter buttons -->
+  <div class="section-title">Filter by current status</div>
+  <div class="status-grid">
+    <button class="status-btn selected" onclick="filterStatus('all')" id="btn-all"><span class="sb-icon">📦</span>All Parcels<span class="sb-count" id="cnt-all">0</span></button>
+    <button class="status-btn" onclick="filterStatus('Collected')" id="btn-Collected"><span class="sb-icon">✅</span>Collected<span class="sb-count" id="cnt-Collected">0</span></button>
+    <button class="status-btn" onclick="filterStatus('In Transit')" id="btn-In Transit"><span class="sb-icon">🚚</span>In Transit<span class="sb-count" id="cnt-In Transit">0</span></button>
+    <button class="status-btn" onclick="filterStatus('At Border')" id="btn-At Border"><span class="sb-icon">🛂</span>At Border<span class="sb-count" id="cnt-At Border">0</span></button>
+  </div>
+
+  <!-- Select all -->
+  <div class="select-all-bar" onclick="toggleAll()">
+    <div class="sel-left"><input type="checkbox" id="sel-all" onclick="event.stopPropagation();toggleAll()"><span id="sel-label">Select all</span></div>
+    <div class="sel-right" id="sel-count">0 selected</div>
+  </div>
+
+  <!-- Parcel list -->
+  <div class="section-title">Parcels</div>
+  <div id="parcel-list"><div class="empty"><div class="empty-icon">🔄</div>Press Sync to load parcels</div></div>
+</main>
+
+<!-- Action panel -->
+<div class="action-panel" id="action-panel">
+  <div class="ap-row">
+    <select class="ap-new-status" id="new-status">
+      <option value="">Update to…</option>
+      <option>Collected</option>
+      <option>In Transit</option>
+      <option>At Border</option>
+      <option>Delivered</option>
+    </select>
+    <button class="ap-update-btn" onclick="applyUpdate()">Update ✓</button>
+  </div>
+  <button class="ap-msg-btn" onclick="genBroadcast()">📢 Generate broadcast message</button>
+  <div class="msg-preview" id="msg-preview"></div>
+  <div class="ap-sel-info" id="ap-sel-info"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SCRIPT_URL       = 'https://script.google.com/macros/s/AKfycbxOuXTABQYtV1nQElDATErXeRF5UNceNViEaCT1PKi0pZZ6qRcWtrUV4bEDqxZA7FH_/exec';
+const CORRECT_PASSWORD = 'BlessdCargo@2026';
+const SESSION_KEY      = 'bcm_drv_session';
+const SESSION_HOURS    = 12;
+const MAX_ATT          = 5;
+let pwAtt = 0;
+let bookings = [];
+let currentFilter = 'all';
+const EMOJ = {'Collected':'✅','In Transit':'🚚','At Border':'🛂','Delivered':'🎉'};
+const SCLS = {'Collected':'s-collected','In Transit':'s-transit','At Border':'s-border','Delivered':'s-delivered'};
+
+// ── Auth ──────────────────────────────────────────────────
+function checkSession(){try{const s=localStorage.getItem(SESSION_KEY);if(!s)return false;return(Date.now()-JSON.parse(s).time)/3600000<SESSION_HOURS}catch(e){return false}}
+function startSession(){localStorage.setItem(SESSION_KEY,JSON.stringify({time:Date.now()}))}
+function togglePw(){const i=document.getElementById('pw'),b=document.getElementById('pw-eye');i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'👁':'🙈'}
+function checkPw(){
+  const input=document.getElementById('pw'),err=document.getElementById('pw-err'),val=input.value;
+  if(!val){err.textContent='Enter your password';return}
+  if(val===CORRECT_PASSWORD){startSession();document.getElementById('lock').classList.add('hidden');input.value='';err.textContent='';pwAtt=0;syncAll()}
+  else{pwAtt++;input.value='';input.classList.remove('pw-shake');void input.offsetWidth;input.classList.add('pw-shake');setTimeout(()=>input.classList.remove('pw-shake'),400);
+    if(pwAtt>=MAX_ATT){err.textContent='Too many attempts. Wait 30 seconds.';input.disabled=true;document.querySelector('.pw-btn').disabled=true;setTimeout(()=>{pwAtt=0;input.disabled=false;document.querySelector('.pw-btn').disabled=false;err.textContent=''},30000)}
+    else err.textContent=`Wrong password. ${MAX_ATT-pwAtt} attempt${MAX_ATT-pwAtt!==1?'s':''} left.`}
+}
+
+// ── API ───────────────────────────────────────────────────
+async function apiGet(a){const r=await fetch(`${SCRIPT_URL}?action=${a}`,{redirect:'follow'});return r.json()}
+async function apiPost(p){const r=await fetch(SCRIPT_URL,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain'},body:JSON.stringify(p)});return r.json()}
+
+// ── Sync ──────────────────────────────────────────────────
+async function syncAll(){
+  setSyncState('loading');
+  try{
+    const res = await apiGet('getBookings');
+    bookings = (res.bookings||[]).filter(b=>b['Status']!=='Delivered');
+    setSyncState('ok');
+    renderAll();
+    toast('✅ Synced');
+  }catch(e){setSyncState('err');toast('❌ Sync failed')}
+}
+
+function setSyncState(s){
+  const d=document.getElementById('sdot'),l=document.getElementById('slabel');
+  d.className='sync-dot'+(s==='loading'?' loading':s==='err'?' err':'');
+  l.textContent=s==='loading'?'Syncing…':s==='err'?'Error':'Synced';
+}
+
+// ── Filter ────────────────────────────────────────────────
+function filterStatus(status){
+  currentFilter = status;
+  document.querySelectorAll('.status-btn').forEach(b=>b.classList.remove('selected'));
+  const btnId = status==='all'?'btn-all':'btn-'+status;
+  const btn = document.getElementById(btnId);
+  if(btn) btn.classList.add('selected');
+  renderList();
+  clearSelection();
+}
+
+// ── Render ────────────────────────────────────────────────
+function renderAll(){
+  // Update counts
+  const all = bookings;
+  document.getElementById('cnt-all').textContent = all.length;
+  ['Collected','In Transit','At Border'].forEach(s=>{
+    const el = document.getElementById('cnt-'+s);
+    if(el) el.textContent = all.filter(b=>b['Status']===s).length;
+  });
+  renderList();
+}
+
+function renderList(){
+  const filtered = currentFilter==='all' ? bookings : bookings.filter(b=>b['Status']===currentFilter);
+  const list = document.getElementById('parcel-list');
+  if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">📦</div>No parcels in this category</div>';return}
+  list.innerHTML = filtered.map(b=>`
+    <div class="parcel-card">
+      <input type="checkbox" class="pchk" data-bc="${b['Barcode']}" style="width:18px;height:18px;accent-color:var(--gold);cursor:pointer;flex-shrink:0" onchange="updateSelection()">
+      <div class="parcel-info">
+        <div class="parcel-code">${b['Barcode']||''}</div>
+        <div class="parcel-name">${b['Customer Name']||''}</div>
+        <div class="parcel-dest">→ ${b['Destination']||''} · ${b['Weight (kg)']||''}kg</div>
+      </div>
+      <span class="parcel-current ${SCLS[b['Status']]||''}">${b['Status']||''}</span>
+    </div>`).join('');
+}
+
+// ── Selection ─────────────────────────────────────────────
+function toggleAll(){
+  const chk = document.getElementById('sel-all');
+  document.querySelectorAll('.pchk').forEach(c=>c.checked=chk.checked);
+  updateSelection();
+}
+
+function updateSelection(){
+  const n = document.querySelectorAll('.pchk:checked').length;
+  const total = document.querySelectorAll('.pchk').length;
+  document.getElementById('sel-count').textContent = n+' selected';
+  document.getElementById('sel-label').textContent = n===total&&total>0?'Deselect all':'Select all';
+  document.getElementById('sel-all').checked = n===total&&total>0;
+  document.getElementById('ap-sel-info').textContent = n ? n+' parcel'+(n!==1?'s':'')+' selected' : '';
+  document.getElementById('action-panel').className = 'action-panel'+(n?' show':'');
+  document.getElementById('msg-preview').style.display='none';
+  if(n) document.body.style.paddingBottom='180px';
+  else document.body.style.paddingBottom='0';
+}
+
+function clearSelection(){
+  document.querySelectorAll('.pchk').forEach(c=>c.checked=false);
+  document.getElementById('sel-all').checked=false;
+  updateSelection();
+}
+
+function getSelected(){
+  const out=[];
+  document.querySelectorAll('.pchk:checked').forEach(chk=>{
+    const b=bookings.find(x=>x['Barcode']===chk.dataset.bc);
+    if(b)out.push(b);
+  });
+  return out;
+}
+
+// ── Apply update ──────────────────────────────────────────
+async function applyUpdate(){
+  const newStatus = document.getElementById('new-status').value;
+  const selected  = getSelected();
+  if(!newStatus){toast('Select a status first');return}
+  if(!selected.length){toast('Select at least one parcel');return}
+  if(!confirm(`Update ${selected.length} parcel${selected.length!==1?'s':''} to "${newStatus}"?`))return;
+  toast('Updating…');
+  let done=0;
+  for(const b of selected){
+    b['Status']=newStatus;
+    try{await apiPost({action:'updateStatus',barcode:b['Barcode'],status:newStatus});done++}catch(e){}
+  }
+  renderAll();
+  clearSelection();
+  toast(`✅ ${done} parcel${done!==1?'s':''} updated to "${newStatus}"`);
+  // Remove delivered ones from list
+  if(newStatus==='Delivered') bookings=bookings.filter(b=>b['Status']!=='Delivered');
+  renderAll();
+}
+
+// ── Generate broadcast ────────────────────────────────────
+function genBroadcast(){
+  const newStatus = document.getElementById('new-status').value||currentFilter;
+  const selected  = getSelected();
+  if(!selected.length){toast('Select at least one parcel');return}
+  const lines = selected.map(b=>`• ${b['Barcode']} — ${b['Customer Name']} → ${b['Destination']}`).join('\n');
+  const msg = `${EMOJ[newStatus]||'📦'} Blessd Cargo Moves — Update\n\nGood day,\n\nThe following parcels are now:\n*${newStatus||'Updated'}*\n\n${lines}\n\n${
+    newStatus==='At Border'?'We are at the border being processed. We will update you once cleared.':
+    newStatus==='In Transit'?'We are on the road moving toward the destination.':
+    newStatus==='Delivered'?'All parcels have been delivered. Thank you for choosing Blessd Cargo Moves!':
+    'We will update you on further progress.'
+  }\n\nReply with your Tracking ID for your specific update.\nSafe · Fast · Reliable 🦅\n— Blessd Cargo Moves`;
+  const prev = document.getElementById('msg-preview');
+  prev.textContent = msg;
+  prev.style.display='block';
+  navigator.clipboard.writeText(msg).then(()=>toast('📢 Broadcast copied!'));
+}
+
+// ── Toast ─────────────────────────────────────────────────
+let tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.className='show';clearTimeout(tt);tt=setTimeout(()=>el.className='',2500)}
+
+// ── Boot ──────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  if(checkSession()){document.getElementById('lock').classList.add('hidden');syncAll()}
+  else setTimeout(()=>document.getElementById('pw').focus(),100);
+  setInterval(()=>{if(!document.hidden&&checkSession())syncAll()},90000);
+});
+</script>
+</body>
+</html>
