@@ -721,83 +721,87 @@ let toastTimer;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.className='show';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='',3000)}
 
 // ══════════════════════════════════════════════════════════
-//  TRIP DATES
+//  TRIP DATES — now stored in Google Sheets
 // ══════════════════════════════════════════════════════════
-const TRIPS_KEY = 'bcm_trip_dates';
-
-function loadTrips(){ try{ return JSON.parse(localStorage.getItem(TRIPS_KEY)||'[]'); } catch(e){ return []; } }
-function saveTrips(trips){ localStorage.setItem(TRIPS_KEY, JSON.stringify(trips)); }
-
-function addTripDate(){
+async function addTripDate(){
   const date  = document.getElementById('t-date').value;
   const name  = document.getElementById('t-name').value.trim();
   const time  = document.getElementById('t-time').value;
   const slots = parseInt(document.getElementById('t-slots').value)||20;
   const notes = document.getElementById('t-notes').value.trim();
   if(!date||!name){ toast('Please fill in trip date and name'); return; }
-  const trips = loadTrips();
-  trips.push({ id: Date.now(), date, name, time, slots, notes, status:'open', booked:0 });
-  trips.sort((a,b)=>a.date.localeCompare(b.date));
-  saveTrips(trips);
-  document.getElementById('t-date').value='';
-  document.getElementById('t-name').value='';
-  document.getElementById('t-notes').value='';
-  document.getElementById('t-slots').value='20';
-  renderTripDates();
-  toast('✅ Trip date added');
+  toast('Saving trip date…');
+  try{
+    await apiPost({action:'addTripDate', data:{name,date,time,slots,notes}});
+    document.getElementById('t-date').value='';
+    document.getElementById('t-name').value='';
+    document.getElementById('t-notes').value='';
+    document.getElementById('t-slots').value='20';
+    toast('✅ Trip date saved to Sheets');
+    await loadAndRenderTrips();
+  } catch(e){ toast('❌ Failed to save trip date'); }
 }
 
-function toggleTripStatus(id){
-  const trips = loadTrips();
-  const t = trips.find(x=>x.id==id);
-  if(t) t.status = t.status==='open'?'closed':'open';
-  saveTrips(trips);
-  renderTripDates();
+async function toggleTripStatus(id, currentStatus){
+  const newStatus = currentStatus==='open'?'closed':'open';
+  try{
+    await apiPost({action:'updateTripDate', id, status:newStatus});
+    toast('✅ Trip '+(newStatus==='open'?'opened':'closed'));
+    await loadAndRenderTrips();
+  } catch(e){ toast('❌ Failed to update trip'); }
 }
 
-function deleteTripDate(id){
+async function deleteTripDate(id){
   if(!confirm('Delete this trip date?')) return;
-  saveTrips(loadTrips().filter(t=>t.id!=id));
-  renderTripDates();
-  toast('Trip date deleted');
+  try{
+    await apiPost({action:'deleteTripDate', id});
+    toast('Trip date deleted');
+    await loadAndRenderTrips();
+  } catch(e){ toast('❌ Failed to delete'); }
 }
 
-function renderTripDates(){
-  const trips = loadTrips();
+async function loadAndRenderTrips(){
+  try{
+    const res = await apiGet('getTripDates');
+    renderTripDates(res.trips||[]);
+  } catch(e){ renderTripDates([]); }
+}
+
+function renderTripDates(trips){
   const list  = document.getElementById('trips-list');
   const count = document.getElementById('trips-count');
-  count.textContent = trips.length + ' trip' + (trips.length!==1?'s':'');
+  count.textContent = (trips.length||0) + ' trip' + (trips.length!==1?'s':'');
 
-  const pubUrl = window.location.origin + window.location.pathname.replace('index.html','') + 'book.html';
+  const pubUrl = window.location.origin + window.location.pathname.replace('index.html','').replace(/\/$/, '') + '/book.html';
   document.getElementById('pub-link-display').textContent = pubUrl;
 
-  if(!trips.length){ list.innerHTML='<div class="empty"><div class="empty-icon">🗓</div>No trip dates yet — add your first one above</div>'; return; }
+  if(!trips||!trips.length){ list.innerHTML='<div class="empty"><div class="empty-icon">🗓</div>No trip dates yet — add your first one above</div>'; return; }
 
   list.innerHTML = trips.map(t=>{
-    const dateStr = new Date(t.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const dateStr = t.date ? new Date(t.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
     const isOpen  = t.status==='open';
-    const spotsLeft = t.slots - (t.booked||0);
+    const spotsLeft = (parseInt(t.slots)||20) - (parseInt(t.booked)||0);
     return `<div class="trip-card ${isOpen?'open':''}">
       <div class="trip-info">
-        <div class="trip-label">${t.name}</div>
+        <div class="trip-label">${t.name||'—'}</div>
         <div class="trip-sub">📅 ${dateStr} ${t.time?'· 🕐 '+t.time:''} · ${spotsLeft} spot${spotsLeft!==1?'s':''} left${t.notes?' · '+t.notes:''}</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:12px">
         <span class="badge ${isOpen?'b-paid':'b-pending'}">${isOpen?'Open':'Closed'}</span>
-        <button class="btn btn-sm ${isOpen?'btn-danger':'btn-success'}" onclick="toggleTripStatus(${t.id})">${isOpen?'Close':'Open'}</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteTripDate(${t.id})">🗑</button>
+        <button class="btn btn-sm ${isOpen?'btn-danger':'btn-success'}" onclick="toggleTripStatus('${t.id}','${t.status}')">${isOpen?'Close':'Open'}</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteTripDate('${t.id}')">🗑</button>
       </div>
     </div>`;
   }).join('');
 }
 
 function copyPubLink(){
-  const url = window.location.origin + window.location.pathname.replace('index.html','') + 'book.html';
+  const url = window.location.origin + window.location.pathname.replace('index.html','').replace(/\/$/, '') + '/book.html';
   navigator.clipboard.writeText(url).then(()=>toast('📋 Public booking link copied!'));
 }
 
 function openPubPage(){
-  const url = window.location.origin + window.location.pathname.replace('index.html','') + 'book.html';
+  const url = window.location.origin + window.location.pathname.replace('index.html','').replace(/\/$/, '') + '/book.html';
   window.open(url,'_blank');
 }
 
@@ -808,7 +812,7 @@ function showTab(name){
   document.getElementById('section-'+name).classList.add('active');
   document.getElementById('tab-'+name).classList.add('active');
   if(name==='bulk')renderBulkList();
-  if(name==='trips')renderTripDates();
+  if(name==='trips')loadAndRenderTrips();
   if(name==='payments')renderPayments();
 }
 
