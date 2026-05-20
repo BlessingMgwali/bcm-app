@@ -2,474 +2,618 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book a Delivery — Blessd Cargo Moves</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0D1F35;--navy2:#162840;
-  --gold:#C8962A;--gold-light:#FDF3E0;--gold-border:#E8C97A;
+  --navy:#0D1F35;--navy2:#0A1826;
+  --gold:#C8962A;--gold2:#E8B84B;--gold-light:#FDF3E0;--gold-border:#E8C97A;
   --green:#0A6B48;--green-light:#E8F5EF;
   --red:#9B2335;--red-light:#FDEAEA;
   --text:#0D1F35;--text2:#3D5068;--text3:#7A90A8;
-  --border:#DDE6F0;--bg:#F5F7FA;--card:#FFFFFF;
-  --radius:10px;--shadow:0 2px 8px rgba(13,31,53,.08);
+  --border:#DDE6F0;
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;color:var(--text);min-height:100vh;background:var(--navy2);-webkit-font-smoothing:antialiased}
 
-/* HEADER */
-header{background:var(--navy);padding:20px 24px;border-bottom:3px solid var(--gold);text-align:center}
-.logo-mark{font-size:36px;margin-bottom:8px}
-.logo-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:2px}
-.logo-sub{font-size:11px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase}
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg svg{width:100%;height:100%}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,rgba(10,24,38,.93) 0%,rgba(13,31,53,.72) 45%,rgba(10,24,38,.96) 100%)}
+.stars{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) ease-in-out infinite var(--delay,0s)}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.9;transform:scale(1.5)}}
+.hero-content{position:relative;z-index:10;flex:1;display:flex;flex-direction:column}
 
-/* MAIN */
-main{padding:24px;max-width:600px;margin:0 auto;width:100%}
-.page-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:6px}
-.page-sub{font-size:13px;color:var(--text3);margin-bottom:24px;line-height:1.6}
+/* NAV */
+.nav{padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,150,42,.12)}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-eagle{font-size:26px;filter:drop-shadow(0 0 12px rgba(200,150,42,.6))}
+.nav-brand{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff}
+.nav-sub{font-size:10px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-top:1px}
+.nav-links{display:flex;gap:10px}
+.nav-btn{background:rgba(200,150,42,.12);border:1px solid rgba(200,150,42,.28);color:var(--gold);padding:8px 16px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:.2s;text-decoration:none;display:inline-block}
+.nav-btn:hover{background:rgba(200,150,42,.22)}
 
-/* STEP INDICATOR */
-.steps{display:flex;gap:0;margin-bottom:28px}
-.step{flex:1;text-align:center;padding:10px 6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);border-bottom:3px solid var(--border);transition:.2s}
-.step.active{color:var(--gold);border-bottom-color:var(--gold)}
-.step.done{color:var(--green);border-bottom-color:var(--green)}
+/* HERO TEXT */
+.hero-text{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px 36px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(200,150,42,.1);border:1px solid rgba(200,150,42,.22);border-radius:20px;padding:6px 16px;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.07em;text-transform:uppercase;margin-bottom:22px}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(34px,6.5vw,68px);font-weight:900;color:#fff;line-height:1.06;margin-bottom:18px;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.hero-h1 em{color:var(--gold2);font-style:normal;display:block}
+.hero-p{font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.55);max-width:500px;line-height:1.75;margin-bottom:36px;font-weight:300}
+.hero-cta{background:var(--gold);color:var(--navy);border:none;padding:16px 38px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.05em;text-transform:uppercase;transition:.2s;box-shadow:0 4px 24px rgba(200,150,42,.38)}
+.hero-cta:hover{background:var(--gold2);transform:translateY(-2px)}
+.hero-cta:active{transform:translateY(0)}
 
-/* CARDS */
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
-.card-header{padding:14px 20px;border-bottom:1px solid var(--border);background:linear-gradient(to right,#FAFBFD,#fff)}
-.card-title{font-size:11px;font-weight:700;color:var(--navy);letter-spacing:.06em;text-transform:uppercase}
-.card-body{padding:20px}
+/* STATS BAR */
+.stats-bar{display:flex;justify-content:center;gap:36px;padding:24px 24px;border-top:1px solid rgba(255,255,255,.05);flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-val{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--gold2);display:block}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.09em;margin-top:3px}
 
-/* TRIP DATE SELECTION */
-.trip-option{border:2px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:.2s;background:#fff}
-.trip-option:hover{border-color:var(--gold);background:var(--gold-light)}
-.trip-option.selected{border-color:var(--gold);background:var(--gold-light)}
-.trip-option-name{font-weight:700;font-size:14px;color:var(--navy);margin-bottom:4px}
-.trip-option-date{font-size:13px;color:var(--text2)}
-.trip-option-sub{font-size:11px;color:var(--text3);margin-top:4px}
-.trip-option-badge{float:right;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--green-light);color:var(--green);text-transform:uppercase}
+/* BOOKING SECTION */
+.book-section{background:#F5F7FA;padding:64px 24px}
+.book-inner{max-width:640px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.sec-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.sec-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:32px}
 
-/* FORMS */
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+/* Steps */
+.steps{display:flex;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-bottom:24px}
+.step{flex:1;padding:12px 8px;text-align:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);background:#fff;border-right:1px solid var(--border);transition:.2s}
+.step:last-child{border-right:none}
+.step.active{background:var(--navy);color:var(--gold)}
+.step.done{background:var(--green-light);color:var(--green)}
+
+/* Card */
+.bcard{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(13,31,53,.07);border:1px solid var(--border);margin-bottom:14px;overflow:hidden}
+.bcard-hdr{padding:14px 20px;border-bottom:1px solid var(--border);background:linear-gradient(to right,#FAFBFD,#fff)}
+.bcard-title{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.07em}
+.bcard-body{padding:20px}
+
+/* Trip options */
+.trip-opt{border:2px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;cursor:pointer;transition:.2s;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.trip-opt:hover{border-color:var(--gold);background:var(--gold-light)}
+.trip-opt.sel{border-color:var(--gold);background:var(--gold-light)}
+.trip-opt-name{font-weight:700;font-size:14px;color:var(--navy);margin-bottom:3px}
+.trip-opt-date{font-size:13px;color:var(--text2)}
+.trip-opt-note{font-size:11px;color:var(--text3);margin-top:3px}
+.trip-spots{font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;background:var(--green-light);color:var(--green);flex-shrink:0;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+
+/* Form */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:500px){.fgrid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em}
-.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:7px;padding:11px 14px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;width:100%;transition:.15s}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,150,42,.12)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:480px){.form-row{grid-template-columns:1fr}}
+.field input,.field select{border:1px solid var(--border);border-radius:7px;padding:11px 14px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;width:100%;transition:.15s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,150,42,.1)}
 
-/* PROHIBITED ITEMS */
+/* Price estimator */
+.price-box{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:10px;padding:18px 20px;margin:14px 0;border:1px solid rgba(200,150,42,.2);display:none}
+.pb-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.pb-price{font-family:'Space Mono',monospace;font-size:30px;font-weight:700;color:var(--gold2);line-height:1}
+.pb-sub{font-size:12px;color:rgba(255,255,255,.35);margin-top:5px}
+.pb-details{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
+.pb-detail{font-size:11px;color:rgba(255,255,255,.45)}
+.pb-detail strong{color:rgba(255,255,255,.75)}
+
+/* Prohibited */
 .proh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
-@media(max-width:480px){.proh-grid{grid-template-columns:1fr}}
+@media(max-width:400px){.proh-grid{grid-template-columns:1fr}}
 .proh-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--border);border-radius:7px;cursor:pointer;font-size:13px;background:#fff;transition:.15s;user-select:none}
 .proh-item:hover{border-color:var(--gold);background:var(--gold-light)}
 .proh-item.hi{border-color:#EDBBBB;background:var(--red-light)}
 .proh-item.hi label{color:var(--red);font-weight:600}
 .proh-item input{width:16px;height:16px;accent-color:var(--red);cursor:pointer;flex-shrink:0}
-.warn-box{background:var(--red-light);border-left:3px solid var(--red);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--red);margin-top:10px;white-space:pre-line;display:none}
+.warn-box{background:var(--red-light);border-left:3px solid var(--red);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--red);margin-top:10px;white-space:pre-line;display:none;line-height:1.6}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);font-family:'Inter',sans-serif;transition:.15s;width:100%}
-.btn:hover{background:var(--bg)}
-.btn-gold{background:var(--gold);color:var(--navy);border-color:var(--gold)}
-.btn-gold:hover{background:#b8851f}
-.btn-outline{background:transparent;color:var(--navy);border-color:var(--border)}
-.btn-outline:hover{background:var(--bg)}
+/* Review */
+.rev-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.rev-row:last-child{border-bottom:none}
+.rev-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;align-self:center}
+.rev-val{font-weight:700;color:var(--navy);text-align:right;max-width:65%}
 
-/* SUCCESS SCREEN */
-#success-screen{display:none;text-align:center;padding:40px 20px}
-.success-icon{font-size:56px;margin-bottom:16px}
-.success-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy);margin-bottom:8px}
-.success-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:24px}
-.tracking-box{background:var(--gold-light);border:2px dashed var(--gold-border);border-radius:var(--radius);padding:16px;margin:0 auto 24px;max-width:280px}
-.tracking-label{font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.tracking-code{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--navy)}
+/* Buttons */
+.btn-gold{background:var(--gold);color:var(--navy);border:none;padding:14px 20px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;transition:.2s;letter-spacing:.03em}
+.btn-gold:hover{background:var(--gold2)}
+.btn-gold:active{transform:scale(.98)}
+.btn-gold:disabled{opacity:.6;cursor:not-allowed}
+.btn-outline{background:#fff;color:var(--navy);border:1px solid var(--border);padding:14px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;width:100%;transition:.2s}
+.btn-outline:hover{background:#F5F7FA}
+.btn-row{display:flex;gap:10px}
+.btn-row .btn-outline{flex:1}
+.btn-row .btn-gold{flex:2}
 
-/* NO DATES */
-.no-dates{text-align:center;padding:40px 20px;color:var(--text3)}
-.no-dates-icon{font-size:48px;margin-bottom:12px;opacity:.5}
-.no-dates-title{font-size:18px;font-weight:600;color:var(--text2);margin-bottom:8px}
-.no-dates-sub{font-size:13px;line-height:1.6}
+/* Msg */
+.fmsg{padding:10px 14px;border-radius:6px;font-size:13px;margin-top:10px;border-left:3px solid var(--red);background:var(--red-light);color:var(--red);display:none}
 
-/* MSG */
-.msg{padding:10px 14px;border-radius:6px;font-size:13px;margin-top:12px;border-left:3px solid;display:none}
-.msg.err{background:var(--red-light);color:var(--red);border-color:var(--red);display:block}
-.msg.info{background:var(--gold-light);color:#7A5A00;border-color:var(--gold);display:block}
+/* Success */
+.success-wrap{text-align:center;padding:40px 20px}
+.s-eagle{font-size:54px;margin-bottom:16px;filter:drop-shadow(0 0 14px rgba(200,150,42,.5))}
+.s-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.s-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:24px}
+.ref-badge{display:inline-block;background:var(--gold-light);border:2px dashed var(--gold-border);border-radius:10px;padding:16px 28px;margin-bottom:20px}
+.ref-lbl{font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.ref-code{font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:var(--navy)}
 
-/* FOOTER */
-footer{text-align:center;padding:24px;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:20px}
-.footer-brand{font-family:'Playfair Display',serif;font-size:14px;color:var(--navy);font-weight:700;margin-bottom:4px}
+/* Features */
+.features{background:var(--navy);padding:60px 24px}
+.feat-inner{max-width:800px;margin:0 auto;text-align:center}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:32px;text-align:left}
+.feat-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:22px 18px}
+.feat-icon{font-size:26px;margin-bottom:10px}
+.feat-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:5px}
+.feat-desc{font-size:12px;color:rgba(255,255,255,.4);line-height:1.6}
+
+/* Footer */
+footer{background:var(--navy2);border-top:1px solid rgba(200,150,42,.12);padding:24px;text-align:center}
+.ft-brand{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:4px}
+.ft-sub{font-size:12px;color:rgba(255,255,255,.28)}
+.ft-links{display:flex;gap:20px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.ft-link{font-size:12px;color:var(--gold);text-decoration:none;opacity:.6}
+.ft-link:hover{opacity:1}
+
+/* Loading / no dates */
+.loading-msg{text-align:center;padding:40px;color:var(--text3);font-size:14px}
+.loading-icon{font-size:32px;margin-bottom:10px}
+.no-dates-msg{text-align:center;padding:40px 20px}
+.nd-icon{font-size:44px;margin-bottom:12px;opacity:.4}
+.nd-title{font-size:17px;font-weight:600;color:var(--text2);margin-bottom:8px}
+.nd-sub{font-size:13px;color:var(--text3);line-height:1.7}
+
+/* Toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;transition:.3s;opacity:0;border:1px solid rgba(200,150,42,.3);white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-mark">🦅</div>
-  <div class="logo-text">Blessd Cargo Moves</div>
-  <div class="logo-sub">Safe · Fast · Reliable</div>
-</header>
-
-<main>
-
-  <!-- LOADING STATE -->
-  <div id="loading-state" style="text-align:center;padding:60px 20px;color:var(--text3)">
-    <div style="font-size:32px;margin-bottom:12px">⏳</div>
-    <div style="font-size:14px">Loading available trips…</div>
+<!-- ══════════════════════════ HERO -->
+<div class="hero">
+  <div class="hero-bg">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="sky" cx="50%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#1a3a5c"/>
+          <stop offset="60%" stop-color="#0a1826"/>
+          <stop offset="100%" stop-color="#050e16"/>
+        </radialGradient>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#C8962A" stop-opacity=".35"/>
+          <stop offset="100%" stop-color="#C8962A" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="sf"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="gf"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <rect width="1440" height="900" fill="url(#sky)"/>
+      <!-- Moon glow -->
+      <circle cx="900" cy="130" r="200" fill="url(#glow)" opacity=".5"/>
+      <circle cx="900" cy="130" r="55" fill="#E8C97A" opacity=".12" filter="url(#sf)"/>
+      <!-- Horizon -->
+      <ellipse cx="720" cy="760" rx="650" ry="130" fill="#C8962A" opacity=".035"/>
+      <!-- Mountains back -->
+      <path d="M0,700 L120,510 L250,620 L400,420 L540,560 L670,370 L800,490 L940,295 L1080,460 L1190,345 L1340,510 L1440,415 L1440,900 L0,900Z" fill="#070f1c" opacity=".9"/>
+      <!-- Mountains front -->
+      <path d="M0,790 L180,660 L340,730 L500,610 L660,690 L810,565 L960,660 L1110,585 L1260,665 L1440,585 L1440,900 L0,900Z" fill="#040c15" opacity=".95"/>
+      <!-- Eagle body -->
+      <g transform="translate(720,310)" filter="url(#gf)">
+        <ellipse cx="0" cy="0" rx="26" ry="15" fill="#C8962A" opacity=".92"/>
+        <!-- Head -->
+        <circle cx="21" cy="-12" r="11" fill="#C8962A" opacity=".92"/>
+        <!-- Beak -->
+        <path d="M30,-9 L45,-7 L30,-4Z" fill="#E8B84B"/>
+        <!-- Eye -->
+        <circle cx="25" cy="-13" r="3" fill="#09111e"/><circle cx="26" cy="-14" r="1" fill="#E8B84B"/>
+        <!-- Left wing -->
+        <path d="M-8,-4 C-85,-62 -230,-82 -390,-42 C-330,-62 -210,-94 -105,-52 C-65,-32 -32,-16 -8,-4Z" fill="#C8962A" opacity=".88"/>
+        <path d="M-8,-4 C-62,-32 -158,-64 -290,-52 C-228,-68 -125,-74 -62,-42 L-8,-4Z" fill="#E8B84B" opacity=".38"/>
+        <!-- Wing tips left -->
+        <path d="M-375,-40 L-390,-42 L-374,-58 L-362,-44Z" fill="#E8B84B" opacity=".55"/>
+        <path d="M-352,-37 L-365,-38 L-350,-55 L-337,-40Z" fill="#E8B84B" opacity=".45"/>
+        <path d="M-330,-32 L-343,-32 L-326,-50 L-314,-34Z" fill="#E8B84B" opacity=".35"/>
+        <!-- Right wing -->
+        <path d="M8,-4 C85,-62 230,-82 390,-42 C330,-62 210,-94 105,-52 C65,-32 32,-16 8,-4Z" fill="#C8962A" opacity=".88"/>
+        <path d="M8,-4 C62,-32 158,-64 290,-52 C228,-68 125,-74 62,-42 L8,-4Z" fill="#E8B84B" opacity=".38"/>
+        <!-- Wing tips right -->
+        <path d="M375,-40 L390,-42 L374,-58 L362,-44Z" fill="#E8B84B" opacity=".55"/>
+        <path d="M352,-37 L365,-38 L350,-55 L337,-40Z" fill="#E8B84B" opacity=".45"/>
+        <path d="M330,-32 L343,-32 L326,-50 L314,-34Z" fill="#E8B84B" opacity=".35"/>
+        <!-- Tail -->
+        <path d="M-18,13 C-38,42 -48,72 -38,92 C-28,72 -14,52 -4,30Z" fill="#C8962A" opacity=".8"/>
+        <path d="M0,15 C-4,46 -4,82 0,102 C4,82 4,46 0,15Z" fill="#C8962A" opacity=".85"/>
+        <path d="M18,13 C38,42 48,72 38,92 C28,72 14,52 4,30Z" fill="#C8962A" opacity=".8"/>
+        <!-- Talons -->
+        <path d="M-14,15 C-18,32 -28,42 -24,44 C-14,40 -7,28 -11,15Z" fill="#C8962A" opacity=".65"/>
+        <path d="M14,15 C18,32 28,42 24,44 C14,40 7,28 11,15Z" fill="#C8962A" opacity=".65"/>
+      </g>
+      <!-- Scatter dots -->
+      <circle cx="380" cy="210" r="1.8" fill="#C8962A" opacity=".38"/>
+      <circle cx="1100" cy="275" r="1.4" fill="#E8B84B" opacity=".48"/>
+      <circle cx="590" cy="455" r="1.1" fill="#C8962A" opacity=".28"/>
+      <circle cx="850" cy="175" r="2.2" fill="#E8B84B" opacity=".3"/>
+      <circle cx="290" cy="355" r="1.4" fill="#C8962A" opacity=".36"/>
+      <circle cx="1190" cy="410" r="1.9" fill="#E8B84B" opacity=".32"/>
+      <circle cx="460" cy="520" r="1.2" fill="#C8962A" opacity=".25"/>
+      <circle cx="1020" cy="195" r="1.6" fill="#E8B84B" opacity=".4"/>
+    </svg>
   </div>
+  <div class="hero-overlay"></div>
+  <div class="stars" id="stars"></div>
 
-  <!-- NO DATES STATE -->
-  <div id="no-dates-state" style="display:none">
-    <div class="no-dates">
-      <div class="no-dates-icon">🗓</div>
-      <div class="no-dates-title">No trips available right now</div>
-      <div class="no-dates-sub">There are no upcoming trip dates open for booking at the moment.<br>Please check back soon or contact us on WhatsApp.</div>
-    </div>
-  </div>
-
-  <!-- BOOKING FORM -->
-  <div id="booking-form" style="display:none">
-
-    <div class="page-title">Book Your Delivery</div>
-    <div class="page-sub">Select your trip date and fill in your parcel details. Your booking will be confirmed by Blessd Cargo Moves.</div>
-
-    <!-- STEPS -->
-    <div class="steps">
-      <div class="step active" id="step1-indicator">1. Trip Date</div>
-      <div class="step" id="step2-indicator">2. Your Details</div>
-      <div class="step" id="step3-indicator">3. Confirm</div>
-    </div>
-
-    <!-- STEP 1 — TRIP DATE -->
-    <div id="step1">
-      <div class="card">
-        <div class="card-header"><span class="card-title">Select Trip Date</span></div>
-        <div class="card-body" id="trips-list"></div>
+  <div class="hero-content">
+    <nav class="nav">
+      <div class="nav-logo">
+        <span class="nav-eagle">🦅</span>
+        <div>
+          <div class="nav-brand">Blessd Cargo Moves</div>
+          <div class="nav-sub">Safe · Fast · Reliable</div>
+        </div>
       </div>
-      <button class="btn btn-gold" onclick="goStep2()" style="margin-top:4px">Next — Your Details →</button>
+      <div class="nav-links">
+        <a href="track.html" class="nav-btn">🔍 Track Parcel</a>
+      </div>
+    </nav>
+
+    <div class="hero-text">
+      <div class="hero-badge">✈️ Johannesburg ↔ Zimbabwe &amp; South Africa</div>
+      <h1 class="hero-h1">Your cargo,<em>delivered with pride.</em></h1>
+      <p class="hero-p">Professional door-to-door cargo services across Zimbabwe and South Africa. Trusted by hundreds of families and businesses every week.</p>
+      <button class="hero-cta" onclick="document.getElementById('booking-section').scrollIntoView({behavior:'smooth'})">Book Your Delivery Now</button>
     </div>
 
-    <!-- STEP 2 — CUSTOMER DETAILS -->
-    <div id="step2" style="display:none">
-      <div class="card">
-        <div class="card-header"><span class="card-title">Your Details</span></div>
-        <div class="card-body">
-          <div class="form-row">
-            <div class="field"><label>Full Name *</label><input id="c-name" placeholder="Your full name" type="text"></div>
-            <div class="field"><label>Phone Number *</label><input id="c-phone" placeholder="+27 or 07x" type="tel"></div>
+    <div class="stats-bar">
+      <div class="stat-item"><span class="stat-val">24h</span><span class="stat-lbl">Updates</span></div>
+      <div class="stat-item"><span class="stat-val">100%</span><span class="stat-lbl">Tracked</span></div>
+      <div class="stat-item"><span class="stat-val">ZW+SA</span><span class="stat-lbl">Coverage</span></div>
+      <div class="stat-item"><span class="stat-val">Weekly</span><span class="stat-lbl">Trips</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ BOOKING -->
+<div class="book-section" id="booking-section">
+  <div class="book-inner">
+    <div class="eyebrow">Book Now</div>
+    <div class="sec-title">Schedule Your Delivery</div>
+    <div class="sec-sub">Select an available trip date, fill in your details, and we will handle the rest. We will contact you on WhatsApp to confirm.</div>
+
+    <div id="loading-state" class="loading-msg"><div class="loading-icon">⏳</div>Loading available trips…</div>
+    <div id="no-dates-state" style="display:none" class="no-dates-msg">
+      <div class="nd-icon">🗓</div>
+      <div class="nd-title">No trips available right now</div>
+      <div class="nd-sub">There are no upcoming trip dates open for booking.<br>Please check back soon or send us a WhatsApp.</div>
+    </div>
+
+    <div id="booking-form" style="display:none">
+      <div class="steps">
+        <div class="step active" id="s1">1. Trip Date</div>
+        <div class="step" id="s2">2. Your Details</div>
+        <div class="step" id="s3">3. Confirm</div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div id="step1">
+        <div class="bcard">
+          <div class="bcard-hdr"><span class="bcard-title">Choose a Trip Date</span></div>
+          <div class="bcard-body" id="trips-container"></div>
+        </div>
+        <button class="btn-gold" onclick="goStep2()">Next — Your Details →</button>
+      </div>
+
+      <!-- STEP 2 -->
+      <div id="step2" style="display:none">
+        <div class="bcard">
+          <div class="bcard-hdr"><span class="bcard-title">Your Details</span></div>
+          <div class="bcard-body">
+            <div class="fgrid">
+              <div class="field"><label>Full Name *</label><input id="c-name" placeholder="Your full name" type="text"></div>
+              <div class="field"><label>Phone Number *</label><input id="c-phone" placeholder="+27 or 07x" type="tel"></div>
+            </div>
+            <div class="fgrid">
+              <div class="field"><label>Destination *</label>
+                <select id="c-dest" onchange="calcPrice()">
+                  <optgroup label="🇿🇼 Zimbabwe">
+                    <option>Harare</option><option>Bulawayo</option><option>Mutare</option>
+                    <option>Gweru</option><option>Masvingo</option><option>Kwekwe</option>
+                    <option>Kadoma</option><option>Bindura</option><option>Chinhoyi</option>
+                    <option>Other Zimbabwe</option>
+                  </optgroup>
+                  <optgroup label="🇿🇦 South Africa">
+                    <option>Johannesburg</option><option>Cape Town</option><option>Durban</option>
+                    <option>Pretoria</option><option>Port Elizabeth</option><option>Bloemfontein</option>
+                    <option>East London</option><option>Polokwane</option><option>Nelspruit</option>
+                    <option>Rustenburg</option><option>Kimberley</option><option>Soweto</option>
+                    <option>Sandton</option><option>Midrand</option><option>Germiston</option>
+                    <option>Benoni</option><option>Boksburg</option><option>Other SA</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="field"><label>Weight (kg) estimate *</label><input id="c-weight" placeholder="e.g. 12" type="number" min="0.5" step="0.5" oninput="calcPrice()"></div>
+            </div>
+            <div class="field" style="margin-bottom:14px"><label>Parcel Contents *</label><input id="c-notes" placeholder="e.g. Clothes, cooking oil, rice, electronics"></div>
+            <div class="price-box" id="price-box">
+              <div class="pb-label">Estimated Price</div>
+              <div class="pb-price" id="est-price">R0</div>
+              <div class="pb-sub">Final price confirmed by Blessd Cargo Moves after booking</div>
+              <div class="pb-details" id="est-details"></div>
+            </div>
           </div>
-          <div class="field"><label>Destination *</label>
-            <select id="c-dest">
-              <optgroup label="🇿🇼 Zimbabwe">
-                <option>Harare</option><option>Bulawayo</option><option>Mutare</option>
-                <option>Gweru</option><option>Masvingo</option><option>Kwekwe</option>
-                <option>Kadoma</option><option>Bindura</option><option>Chinhoyi</option><option>Other Zimbabwe</option>
-              </optgroup>
-              <optgroup label="🇿🇦 South Africa">
-                <option>Johannesburg</option><option>Cape Town</option><option>Durban</option>
-                <option>Pretoria</option><option>Port Elizabeth</option><option>Bloemfontein</option>
-                <option>East London</option><option>Polokwane</option><option>Nelspruit</option>
-                <option>Rustenburg</option><option>Kimberley</option><option>Soweto</option>
-                <option>Sandton</option><option>Midrand</option><option>Germiston</option>
-                <option>Benoni</option><option>Boksburg</option><option>Other SA</option>
-              </optgroup>
-            </select>
+        </div>
+
+        <div class="bcard">
+          <div class="bcard-hdr"><span class="bcard-title">⚠️ Contents Declaration</span></div>
+          <div class="bcard-body">
+            <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">Tick any of the following items you are sending. Be honest — undeclared prohibited items can result in confiscation of your entire parcel at the border.</p>
+            <div class="proh-grid" id="proh-grid"></div>
+            <div class="warn-box" id="warn-box"></div>
+            <div style="margin-top:14px;display:flex;align-items:flex-start;gap:8px">
+              <input type="checkbox" id="c-terms" style="width:16px;height:16px;accent-color:var(--navy);margin-top:2px;flex-shrink:0">
+              <label for="c-terms" style="font-size:12px;color:var(--text2);cursor:pointer;line-height:1.55">I confirm all parcel contents are accurately declared. I agree that Blessd Cargo Moves is not responsible for prohibited or undeclared items.</label>
+            </div>
+            <div class="fmsg" id="s2-msg"></div>
           </div>
-          <div class="form-row">
-            <div class="field"><label>Estimated Weight (kg) *</label><input id="c-weight" placeholder="e.g. 10" type="number" min="0.5" step="0.5"></div>
-            <div class="field"><label>Parcel Contents *</label><input id="c-notes" placeholder="e.g. Clothes, cooking oil"></div>
-          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-outline" onclick="goStep1()">← Back</button>
+          <button class="btn-gold" onclick="goStep3()">Review Booking →</button>
         </div>
       </div>
 
-      <!-- Prohibited items -->
-      <div class="card">
-        <div class="card-header"><span class="card-title">⚠️ Parcel Contents Declaration</span></div>
-        <div class="card-body">
-          <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Please tick any of the following items that are in your parcel. Be honest — undeclared items may cause your parcel to be confiscated at the border.</p>
-          <div class="proh-grid" id="pub-proh-grid"></div>
-          <div class="warn-box" id="pub-warn-box"></div>
-          <div style="margin-top:14px;display:flex;align-items:flex-start;gap:8px">
-            <input type="checkbox" id="c-terms" style="width:16px;height:16px;accent-color:var(--navy);margin-top:2px;flex-shrink:0">
-            <label for="c-terms" style="font-size:12px;color:var(--text2);cursor:pointer;line-height:1.5">I confirm all parcel contents are accurately declared. I understand that Blessd Cargo Moves is not responsible for prohibited or undeclared items.</label>
-          </div>
-          <div id="step2-msg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:6px;font-size:13px;border-left:3px solid var(--red);background:var(--red-light);color:var(--red)"></div>
+      <!-- STEP 3 -->
+      <div id="step3" style="display:none">
+        <div class="bcard">
+          <div class="bcard-hdr"><span class="bcard-title">Review Your Booking</span></div>
+          <div class="bcard-body" id="review-body"></div>
         </div>
-      </div>
-
-      <div style="display:flex;gap:10px">
-        <button class="btn btn-outline" onclick="goStep1()" style="flex:1">← Back</button>
-        <button class="btn btn-gold" onclick="goStep3()" style="flex:2">Next — Review →</button>
+        <div class="fmsg" id="s3-msg"></div>
+        <div class="btn-row" style="margin-top:14px">
+          <button class="btn-outline" onclick="goStep2()">← Back</button>
+          <button class="btn-gold" id="submit-btn" onclick="submitBooking()">✅ Confirm Booking</button>
+        </div>
+        <p style="font-size:12px;color:var(--text3);text-align:center;margin-top:12px;line-height:1.6">We will contact you on WhatsApp to confirm and send payment details.</p>
       </div>
     </div>
 
-    <!-- STEP 3 — CONFIRM -->
-    <div id="step3" style="display:none">
-      <div class="card">
-        <div class="card-header"><span class="card-title">Review Your Booking</span></div>
-        <div class="card-body" id="review-body"></div>
+    <!-- SUCCESS -->
+    <div id="success-screen" style="display:none">
+      <div class="success-wrap">
+        <div class="s-eagle">🦅</div>
+        <div class="s-title">Booking Submitted!</div>
+        <div class="s-sub">Your booking has been received. We will WhatsApp you shortly to confirm payment and collection details.</div>
+        <div class="ref-badge">
+          <div class="ref-lbl">Your Reference Number</div>
+          <div class="ref-code" id="s-ref">—</div>
+        </div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:24px" id="s-details"></div>
+        <button class="btn-gold" onclick="location.reload()" style="max-width:260px;margin:0 auto">Make Another Booking</button>
       </div>
-      <div id="submit-msg" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:6px;font-size:13px"></div>
-      <div style="display:flex;gap:10px">
-        <button class="btn btn-outline" onclick="goStep2()" style="flex:1">← Back</button>
-        <button class="btn btn-gold" id="submit-btn" onclick="submitBooking()" style="flex:2">✅ Confirm Booking</button>
-      </div>
-      <p style="font-size:12px;color:var(--text3);text-align:center;margin-top:12px;line-height:1.6">By confirming, you agree to our terms and conditions. Blessd Cargo Moves will contact you to confirm your booking and provide payment details.</p>
     </div>
-
   </div>
+</div>
 
-  <!-- SUCCESS SCREEN -->
-  <div id="success-screen">
-    <div class="success-icon">🎉</div>
-    <div class="success-title">Booking Submitted!</div>
-    <div class="success-sub">Your booking request has been received. Blessd Cargo Moves will contact you on WhatsApp to confirm and provide payment details.</div>
-    <div class="tracking-box">
-      <div class="tracking-label">Your Reference</div>
-      <div class="tracking-code" id="success-ref">—</div>
+<!-- ══════════════════════════ FEATURES -->
+<div class="features">
+  <div class="feat-inner">
+    <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Why Choose Us</div>
+    <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff">Built for African families and businesses</div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">📦</div><div class="feat-title">Real-time tracking</div><div class="feat-desc">Track your parcel from Johannesburg to its destination with live status updates.</div></div>
+      <div class="feat-card"><div class="feat-icon">🛡️</div><div class="feat-title">Documented &amp; safe</div><div class="feat-desc">Every parcel is registered with a unique barcode. No parcel gets lost.</div></div>
+      <div class="feat-card"><div class="feat-icon">💳</div><div class="feat-title">Flexible payment</div><div class="feat-desc">Pay via Capitec, EcoCash, or cash. COD available for trusted customers.</div></div>
+      <div class="feat-card"><div class="feat-icon">🚀</div><div class="feat-title">Weekly departures</div><div class="feat-desc">Regular scheduled trips to Zimbabwe and across South Africa every week.</div></div>
     </div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.7" id="success-details"></div>
-    <button class="btn btn-gold" onclick="resetForm()" style="max-width:280px;margin:0 auto">Make Another Booking</button>
   </div>
+</div>
 
-</main>
-
+<!-- FOOTER -->
 <footer>
-  <div class="footer-brand">Blessd Cargo Moves</div>
-  Safe · Fast · Reliable · Est. 2026
+  <div class="ft-brand">Blessd Cargo Moves 🦅</div>
+  <div class="ft-sub">Safe · Fast · Reliable · Est. 2026</div>
+  <div class="ft-links">
+    <a href="track.html" class="ft-link">Track Parcel</a>
+    <a href="book.html" class="ft-link">Book Delivery</a>
+  </div>
 </footer>
+
+<div id="toast"></div>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOuXTABQYtV1nQElDATErXeRF5UNceNViEaCT1PKi0pZZ6qRcWtrUV4bEDqxZA7FH_/exec';
-const TRIPS_KEY  = 'bcm_trip_dates';
 
 let selectedTrip = null;
+let pricing = [];
 
 const PROHIBITED = [
-  {label:'Fresh Meat',        risk:'high',  note:'Prohibited — will be confiscated at border'},
+  {label:'Fresh Meat',        risk:'high',  note:'Prohibited — confiscated at border'},
   {label:'Fresh Vegetables',  risk:'high',  note:'Requires phytosanitary certificate'},
   {label:'Fresh Fruit',       risk:'high',  note:'Requires phytosanitary certificate'},
   {label:'Dairy Products',    risk:'high',  note:'Prohibited without special permits'},
-  {label:'Alcohol',           risk:'medium',note:'Heavily taxed — declare value'},
+  {label:'Alcohol',           risk:'medium',note:'Heavy duty — must declare'},
   {label:'Prescription Meds', risk:'medium',note:'Needs documentation'},
   {label:'Electronics',       risk:'medium',note:'Customs duty applies — declare value'},
   {label:'Cigarettes/Tobacco',risk:'medium',note:'Quantity limits apply'},
   {label:'Cooking Oil',       risk:'low',   note:'Allowed — import duty applies'},
-  {label:'Clothing',          risk:'low',   note:'Allowed'},
-  {label:'Rice/Flour/Sugar',  risk:'low',   note:'Allowed'},
-  {label:'Packaged Food',     risk:'low',   note:'Allowed — must be sealed'},
+  {label:'Clothing',          risk:'low',   note:'Allowed — declare value'},
+  {label:'Rice/Flour/Sugar',  risk:'low',   note:'Allowed — large qty may attract duty'},
+  {label:'Packaged Food',     risk:'low',   note:'Allowed — must be commercially sealed'},
 ];
 
-// ── Load trips from localStorage (shared with dashboard) ──
-function getOpenTrips(){
-  try{
-    const trips = JSON.parse(localStorage.getItem(TRIPS_KEY)||'[]');
-    const today = new Date().toISOString().slice(0,10);
-    return trips.filter(t => t.status==='open' && t.date >= today);
-  } catch(e){ return []; }
-}
+// Stars
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<70;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*1.8+0.4;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*70}%;left:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s`;
+    c.appendChild(s);
+  }
+})();
 
-// ── Initialise page ───────────────────────────────────────
-window.addEventListener('DOMContentLoaded',()=>{
+async function apiGet(a){const r=await fetch(`${SCRIPT_URL}?action=${a}`,{redirect:'follow'});return r.json()}
+async function apiPost(p){const r=await fetch(SCRIPT_URL,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain'},body:JSON.stringify(p)});return r.json()}
+
+// Boot
+window.addEventListener('DOMContentLoaded',async()=>{
   buildProhGrid();
-  setTimeout(initPage, 600);
+  try{
+    const [trR, prR] = await Promise.all([apiGet('getOpenTrips'), apiGet('getPricing')]);
+    pricing = prR.pricing || [];
+    document.getElementById('loading-state').style.display='none';
+    const trips = trR.trips || [];
+    if(!trips.length){ document.getElementById('no-dates-state').style.display='block'; return; }
+    document.getElementById('booking-form').style.display='block';
+    renderTrips(trips);
+  } catch(e){
+    document.getElementById('loading-state').innerHTML='<div class="loading-icon">⚠️</div><div>Could not load trips. Please refresh the page.</div>';
+  }
 });
 
-function initPage(){
-  document.getElementById('loading-state').style.display='none';
-  const trips = getOpenTrips();
-  if(!trips.length){
-    document.getElementById('no-dates-state').style.display='block';
-    return;
-  }
-  document.getElementById('booking-form').style.display='block';
-  renderTripOptions(trips);
-}
-
-function renderTripOptions(trips){
-  const list = document.getElementById('trips-list');
-  list.innerHTML = trips.map(t=>{
-    const dateStr = new Date(t.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-    const spotsLeft = t.slots - (t.booked||0);
-    return `<div class="trip-option ${selectedTrip&&selectedTrip.id==t.id?'selected':''}" onclick="selectTrip(${t.id})">
-      <span class="trip-option-badge">${spotsLeft} spot${spotsLeft!==1?'s':''} left</span>
-      <div class="trip-option-name">${t.name}</div>
-      <div class="trip-option-date">📅 ${dateStr}${t.time?' · 🕐 '+t.time:''}</div>
-      ${t.notes?`<div class="trip-option-sub">ℹ️ ${t.notes}</div>`:''}
+function renderTrips(trips){
+  document.getElementById('trips-container').innerHTML = trips.map(t=>{
+    const d = t.date ? new Date(t.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
+    const spots = (parseInt(t.slots)||20)-(parseInt(t.booked)||0);
+    return `<div class="trip-opt" data-id="${t.id}" onclick="selectTrip(this,'${t.id}')">
+      <div>
+        <div class="trip-opt-name">${t.name||'Trip'}</div>
+        <div class="trip-opt-date">📅 ${d}${t.time?' · 🕐 '+t.time:''}</div>
+        ${t.notes?`<div class="trip-opt-note">ℹ️ ${t.notes}</div>`:''}
+      </div>
+      <div class="trip-spots">${spots} spot${spots!==1?'s':''}</div>
     </div>`;
   }).join('');
+  // store trips array for later reference
+  window._trips = trips;
 }
 
-function selectTrip(id){
-  const trips = getOpenTrips();
-  selectedTrip = trips.find(t=>t.id==id)||null;
-  renderTripOptions(trips);
+function selectTrip(el, id){
+  document.querySelectorAll('.trip-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedTrip = (window._trips||[]).find(t=>String(t.id)===String(id)) || {id};
 }
 
-// ── Prohibited items grid ─────────────────────────────────
+function calcPrice(){
+  const dest   = document.getElementById('c-dest').value;
+  const weight = parseFloat(document.getElementById('c-weight').value)||0;
+  const box    = document.getElementById('price-box');
+  if(!weight){ box.style.display='none'; return; }
+  const p = pricing.find(x=>x.destination===dest) || {perKg:60,minimum:400};
+  const calc = Math.max(weight*(parseFloat(p.perKg)||60), parseFloat(p.minimum)||400);
+  document.getElementById('est-price').textContent = 'R'+Math.round(calc).toLocaleString('en-ZA');
+  document.getElementById('est-details').innerHTML = `<div class="pb-detail">Rate: <strong>R${p.perKg}/kg</strong></div><div class="pb-detail">Minimum: <strong>R${p.minimum}</strong></div><div class="pb-detail">Your weight: <strong>${weight}kg</strong></div>`;
+  box.style.display = 'block';
+}
+
 function buildProhGrid(){
-  document.getElementById('pub-proh-grid').innerHTML = PROHIBITED.map((item,i)=>
-    `<div class="proh-item ${item.risk==='high'?'hi':''}" onclick="document.getElementById('pp${i}').click()">
-      <input type="checkbox" id="pp${i}" data-risk="${item.risk}" data-note="${item.note}" onclick="event.stopPropagation();checkProh()">
-      <label for="pp${i}" style="cursor:pointer">${item.label}</label>
+  document.getElementById('proh-grid').innerHTML = PROHIBITED.map((item,i)=>
+    `<div class="proh-item ${item.risk==='high'?'hi':''}" onclick="document.getElementById('pi${i}').click()">
+      <input type="checkbox" id="pi${i}" data-risk="${item.risk}" data-note="${item.note}" onclick="event.stopPropagation();checkProh()">
+      <label for="pi${i}" style="cursor:pointer">${item.label}</label>
     </div>`
   ).join('');
 }
 
 function checkProh(){
-  const checked=[...document.querySelectorAll('#pub-proh-grid input:checked')];
+  const checked=[...document.querySelectorAll('#proh-grid input:checked')];
   const high=checked.filter(c=>c.dataset.risk==='high'),med=checked.filter(c=>c.dataset.risk==='medium');
-  const wb=document.getElementById('pub-warn-box');
+  const wb=document.getElementById('warn-box');
   if(!checked.length){wb.style.display='none';return}
   let msg='';
-  if(high.length){msg+='⛔ HIGH RISK ITEMS:\n';high.forEach(c=>msg+=`• ${c.nextElementSibling.textContent}: ${c.dataset.note}\n`)}
-  if(med.length){msg+='\n⚠️ Items needing declaration:\n';med.forEach(c=>msg+=`• ${c.nextElementSibling.textContent}: ${c.dataset.note}\n`)}
+  if(high.length){msg+='⛔ HIGH RISK — likely confiscated at border:\n';high.forEach(c=>msg+=`• ${c.nextElementSibling.textContent}: ${c.dataset.note}\n`)}
+  if(med.length){msg+='\n⚠️ Must declare at border:\n';med.forEach(c=>msg+=`• ${c.nextElementSibling.textContent}: ${c.dataset.note}\n`)}
   wb.textContent=msg.trim();wb.style.display='block';
 }
 
-// ── Step navigation ───────────────────────────────────────
 function goStep1(){
-  document.getElementById('step1').style.display='block';
-  document.getElementById('step2').style.display='none';
-  document.getElementById('step3').style.display='none';
-  document.getElementById('step1-indicator').className='step active';
-  document.getElementById('step2-indicator').className='step';
-  document.getElementById('step3-indicator').className='step';
+  ['step1','step2','step3'].forEach((id,i)=>{ document.getElementById(id).style.display=i===0?'block':'none'; });
+  document.getElementById('s1').className='step active';
+  document.getElementById('s2').className='step';
+  document.getElementById('s3').className='step';
 }
 
 function goStep2(){
   if(!selectedTrip){alert('Please select a trip date first.');return}
-  document.getElementById('step1').style.display='none';
-  document.getElementById('step2').style.display='block';
-  document.getElementById('step3').style.display='none';
-  document.getElementById('step1-indicator').className='step done';
-  document.getElementById('step2-indicator').className='step active';
-  document.getElementById('step3-indicator').className='step';
+  ['step1','step2','step3'].forEach((id,i)=>{ document.getElementById(id).style.display=i===1?'block':'none'; });
+  document.getElementById('s1').className='step done';
+  document.getElementById('s2').className='step active';
+  document.getElementById('s3').className='step';
 }
 
 function goStep3(){
-  const name  = document.getElementById('c-name').value.trim();
-  const phone = document.getElementById('c-phone').value.trim();
-  const dest  = document.getElementById('c-dest').value;
-  const weight= parseFloat(document.getElementById('c-weight').value);
-  const notes = document.getElementById('c-notes').value.trim();
-  const terms = document.getElementById('c-terms').checked;
-  const msgEl = document.getElementById('step2-msg');
+  const name=document.getElementById('c-name').value.trim();
+  const phone=document.getElementById('c-phone').value.trim();
+  const dest=document.getElementById('c-dest').value;
+  const weight=parseFloat(document.getElementById('c-weight').value);
+  const notes=document.getElementById('c-notes').value.trim();
+  const terms=document.getElementById('c-terms').checked;
+  const msg=document.getElementById('s2-msg');
 
-  if(!name||!phone||!weight||!notes){msgEl.style.display='block';msgEl.textContent='⚠️ Please fill in all required fields.';return}
-  if(!terms){msgEl.style.display='block';msgEl.textContent='⚠️ Please agree to the declaration.';return}
-  msgEl.style.display='none';
+  if(!name||!phone||!weight||!notes){msg.textContent='⚠️ Please fill in all required fields.';msg.style.display='block';return}
+  if(!terms){msg.textContent='⚠️ Please agree to the declaration to proceed.';msg.style.display='block';return}
+  msg.style.display='none';
 
-  const highRisk=[...document.querySelectorAll('#pub-proh-grid input:checked')].filter(c=>c.dataset.risk==='high');
-  if(highRisk.length&&!confirm('⛔ You have selected high-risk items that may be confiscated at the border.\n\nDo you still want to proceed?'))return;
+  const highRisk=[...document.querySelectorAll('#proh-grid input:checked')].filter(c=>c.dataset.risk==='high');
+  if(highRisk.length&&!confirm('⛔ You have ticked high-risk items that may be confiscated at the border.\n\nDo you still want to proceed?'))return;
 
-  const dateStr = new Date(selectedTrip.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const p=pricing.find(x=>x.destination===dest)||{perKg:60,minimum:400};
+  const estPrice=Math.max(weight*(parseFloat(p.perKg)||60),parseFloat(p.minimum)||400);
+  const tripName=selectedTrip.name||'Trip';
+  const tripDate=selectedTrip.date?new Date(selectedTrip.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'}):'TBC';
 
   document.getElementById('review-body').innerHTML=`
-    <div style="display:flex;flex-direction:column;gap:12px">
-      ${[
-        {label:'Trip',     value:`${selectedTrip.name} — ${dateStr}`},
-        {label:'Name',     value:name},
-        {label:'Phone',    value:phone},
-        {label:'Destination', value:dest},
-        {label:'Weight',   value:weight+'kg (estimate)'},
-        {label:'Contents', value:notes},
-      ].map(r=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
-        <span style="color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em">${r.label}</span>
-        <span style="font-weight:600;color:var(--navy);text-align:right;max-width:60%">${r.value}</span>
-      </div>`).join('')}
-    </div>
+    ${[
+      {l:'Trip',v:`${tripName} — ${tripDate}`},
+      {l:'Name',v:name},{l:'Phone',v:phone},
+      {l:'Destination',v:dest},
+      {l:'Weight',v:weight+'kg (estimate)'},
+      {l:'Estimated Price',v:'R'+Math.round(estPrice).toLocaleString('en-ZA')},
+      {l:'Contents',v:notes},
+    ].map(r=>`<div class="rev-row"><span class="rev-label">${r.l}</span><span class="rev-val">${r.v}</span></div>`).join('')}
     <div style="background:var(--gold-light);border:1px solid var(--gold-border);border-radius:6px;padding:12px;margin-top:14px;font-size:12px;color:#7A5A00;line-height:1.6">
-      📞 After submitting, Blessd Cargo Moves will contact you on <strong>${phone}</strong> to confirm your booking and send payment details.
+      📞 After confirming we will WhatsApp <strong>${phone}</strong> with payment and collection details.
     </div>`;
 
-  document.getElementById('step1').style.display='none';
-  document.getElementById('step2').style.display='none';
-  document.getElementById('step3').style.display='block';
-  document.getElementById('step1-indicator').className='step done';
-  document.getElementById('step2-indicator').className='step done';
-  document.getElementById('step3-indicator').className='step active';
+  ['step1','step2','step3'].forEach((id,i)=>{ document.getElementById(id).style.display=i===2?'block':'none'; });
+  document.getElementById('s1').className='step done';
+  document.getElementById('s2').className='step done';
+  document.getElementById('s3').className='step active';
 }
 
-// ── Submit booking to Google Sheets ──────────────────────
 async function submitBooking(){
-  const name  = document.getElementById('c-name').value.trim();
-  const phone = document.getElementById('c-phone').value.trim();
-  const dest  = document.getElementById('c-dest').value;
-  const weight= parseFloat(document.getElementById('c-weight').value);
-  const notes = document.getElementById('c-notes').value.trim();
-  const btn   = document.getElementById('submit-btn');
-  const msgEl = document.getElementById('submit-msg');
-
-  btn.disabled=true;btn.textContent='Submitting…';
-  msgEl.style.display='block';
-  msgEl.style.background='var(--gold-light)';msgEl.style.color='#7A5A00';msgEl.style.borderLeft='3px solid var(--gold)';msgEl.style.borderRadius='6px';msgEl.style.padding='10px 14px';msgEl.style.fontSize='13px';
-  msgEl.textContent='Sending your booking…';
-
-  const dateStr = new Date(selectedTrip.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-
+  const name=document.getElementById('c-name').value.trim();
+  const phone=document.getElementById('c-phone').value.trim();
+  const dest=document.getElementById('c-dest').value;
+  const weight=parseFloat(document.getElementById('c-weight').value);
+  const notes=document.getElementById('c-notes').value.trim();
+  const p=pricing.find(x=>x.destination===dest)||{perKg:60,minimum:400};
+  const estPrice=Math.round(Math.max(weight*(parseFloat(p.perKg)||60),parseFloat(p.minimum)||400));
+  const btn=document.getElementById('submit-btn');
+  const msg=document.getElementById('s3-msg');
+  btn.disabled=true;btn.textContent='Submitting…';msg.style.display='none';
   try{
-    const res = await fetch(SCRIPT_URL,{
-      method:'POST',redirect:'follow',
-      headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({
-        action:'addBooking',
-        data:{
-          name, phone,
-          destination: dest,
-          weight, price:0,
-          payment:'Pending',
-          departureDate: selectedTrip.date,
-          notes:`${notes} | Trip: ${selectedTrip.name} | Via public booking`
-        }
-      })
-    });
-    const data = await res.json();
-    if(data.error) throw new Error(data.error);
-
-    // Update booked count locally
-    try{
-      const trips = JSON.parse(localStorage.getItem(TRIPS_KEY)||'[]');
-      const t = trips.find(x=>x.id==selectedTrip.id);
-      if(t){ t.booked=(t.booked||0)+1; localStorage.setItem(TRIPS_KEY,JSON.stringify(trips)); }
-    }catch(e){}
-
-    // Show success
+    const res=await apiPost({action:'addBooking',data:{
+      name,phone,destination:dest,weight,price:estPrice,
+      payment:'Pending',status:'Collected',
+      departureDate:selectedTrip.date||'',
+      notes:`${notes} | Trip: ${selectedTrip.name||''} | Public booking`,
+      tripId:selectedTrip.id
+    }});
+    if(res.error)throw new Error(res.error);
     document.getElementById('booking-form').style.display='none';
     document.getElementById('success-screen').style.display='block';
-    document.getElementById('success-ref').textContent=data.barcode||'BCM-'+Date.now().toString().slice(-4);
-    document.getElementById('success-details').innerHTML=`
-      <strong>${name}</strong><br>
-      ${dest} · ${weight}kg<br>
-      Trip: ${selectedTrip.name}<br>
-      Date: ${dateStr}<br><br>
-      We will WhatsApp you on <strong>${phone}</strong> with confirmation and payment details.`;
-
+    document.getElementById('s-ref').textContent=res.barcode||'BCM-'+Date.now().toString().slice(-4);
+    const d=selectedTrip.date?new Date(selectedTrip.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long'}):'TBC';
+    document.getElementById('s-details').innerHTML=`<strong>${name}</strong> · ${dest} · ${weight}kg<br>Trip: ${selectedTrip.name||''}<br>Departure: ${d}<br><br>We will contact you on <strong>${phone}</strong>.`;
   }catch(e){
-    msgEl.style.background='var(--red-light)';msgEl.style.color='var(--red)';msgEl.style.borderLeft='3px solid var(--red)';
-    msgEl.textContent='❌ Submission failed. Please try again or contact us on WhatsApp.';
+    msg.textContent='❌ Submission failed. Please try again or contact us on WhatsApp.';
+    msg.style.display='block';
     btn.disabled=false;btn.textContent='✅ Confirm Booking';
   }
 }
 
-function resetForm(){
-  selectedTrip=null;
-  document.getElementById('c-name').value='';
-  document.getElementById('c-phone').value='';
-  document.getElementById('c-weight').value='';
-  document.getElementById('c-notes').value='';
-  document.getElementById('c-terms').checked=false;
-  document.getElementById('pub-warn-box').style.display='none';
-  document.querySelectorAll('#pub-proh-grid input').forEach(c=>c.checked=false);
-  document.getElementById('submit-btn').disabled=false;
-  document.getElementById('submit-btn').textContent='✅ Confirm Booking';
-  document.getElementById('submit-msg').style.display='none';
-  document.getElementById('success-screen').style.display='none';
-  document.getElementById('booking-form').style.display='none';
-  document.getElementById('loading-state').style.display='block';
-  setTimeout(initPage,300);
-  goStep1();
-}
+let tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.className='show';clearTimeout(tt);tt=setTimeout(()=>el.className='',3000)}
 </script>
 </body>
 </html>
