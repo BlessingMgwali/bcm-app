@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Parcel — Blessd Cargo Moves</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D1F35;--navy2:#0A1826;
+  --gold:#C8962A;--gold2:#E8B84B;--gold-light:#FDF3E0;--gold-border:#E8C97A;
+  --green:#0A6B48;--green-light:#E8F5EF;
+  --red:#9B2335;--red-light:#FDEAEA;
+  --text:#0D1F35;--text2:#3D5068;--text3:#7A90A8;
+  --border:#DDE6F0;
+}
+body{font-family:'Inter',sans-serif;background:var(--navy2);min-height:100vh;-webkit-font-smoothing:antialiased;color:#fff}
+
+/* NAV */
+.nav{padding:18px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,150,42,.12)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-eagle{font-size:24px;filter:drop-shadow(0 0 8px rgba(200,150,42,.5))}
+.nav-brand{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff}
+.nav-sub{font-size:10px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}
+.nav-back{color:var(--gold);font-size:13px;text-decoration:none;opacity:.7}
+.nav-back:hover{opacity:1}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,rgba(13,31,53,.98) 0%,rgba(10,24,38,1) 100%);padding:56px 24px 48px;text-align:center;border-bottom:1px solid rgba(200,150,42,.1);position:relative;overflow:hidden}
+.hero::before{content:'🦅';position:absolute;font-size:300px;opacity:.03;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.hero-eyebrow{font-size:11px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,44px);font-weight:700;color:#fff;margin-bottom:10px}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.45);margin-bottom:36px}
+
+/* SEARCH */
+.search-box{max-width:480px;margin:0 auto}
+.search-wrap{display:flex;gap:0;background:rgba(255,255,255,.07);border:1.5px solid rgba(200,150,42,.3);border-radius:10px;overflow:hidden;transition:.2s}
+.search-wrap:focus-within{border-color:var(--gold);background:rgba(200,150,42,.07)}
+.search-input{flex:1;background:transparent;border:none;color:#fff;font-size:16px;padding:14px 18px;font-family:'Space Mono',monospace;outline:none;letter-spacing:.06em;text-transform:uppercase}
+.search-input::placeholder{color:rgba(255,255,255,.25);font-family:'Inter',sans-serif;text-transform:none;letter-spacing:0;font-size:14px}
+.search-btn{background:var(--gold);border:none;color:var(--navy);padding:14px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:.2s;white-space:nowrap}
+.search-btn:hover{background:var(--gold2)}
+.search-btn:active{transform:scale(.97)}
+.search-hint{font-size:12px;color:rgba(255,255,255,.3);margin-top:10px;text-align:center}
+
+/* MAIN */
+main{max-width:560px;margin:0 auto;padding:28px 20px}
+
+/* LOADING / ERROR */
+.state-box{text-align:center;padding:48px 24px}
+.state-icon{font-size:48px;margin-bottom:14px}
+.state-title{font-size:18px;font-weight:600;color:#fff;margin-bottom:8px}
+.state-sub{font-size:14px;color:rgba(255,255,255,.4);line-height:1.7}
+
+/* RESULT CARD */
+.result-card{background:rgba(255,255,255,.04);border:1px solid rgba(200,150,42,.2);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.rc-header{background:linear-gradient(135deg,var(--navy),#0e2540);padding:20px 22px;border-bottom:1px solid rgba(200,150,42,.15)}
+.rc-barcode{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--gold2);margin-bottom:4px;letter-spacing:.06em}
+.rc-name{font-size:16px;font-weight:600;color:#fff}
+.rc-dest{font-size:13px;color:rgba(255,255,255,.45);margin-top:3px}
+.rc-body{padding:20px 22px}
+
+/* Status badge */
+.status-big{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:8px;font-size:15px;font-weight:700;margin-bottom:18px;text-transform:uppercase;letter-spacing:.05em}
+.sb-collected{background:#E3EEF9;color:#1A5C9E}
+.sb-transit{background:#EDE7F6;color:#4527A0}
+.sb-border{background:#FFF3E0;color:#E65100}
+.sb-delivered{background:#E8F5EF;color:#0A6B48}
+
+/* Journey timeline */
+.timeline{margin:14px 0}
+.tl-step{display:flex;gap:14px;margin-bottom:0;position:relative}
+.tl-step:not(:last-child)::before{content:'';position:absolute;left:15px;top:32px;bottom:-4px;width:2px;background:rgba(255,255,255,.08);z-index:0}
+.tl-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;position:relative;z-index:1;margin-top:2px}
+.tl-dot.done{background:var(--gold);box-shadow:0 0 12px rgba(200,150,42,.4)}
+.tl-dot.current{background:var(--gold);box-shadow:0 0 16px rgba(200,150,42,.6);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 16px rgba(200,150,42,.6)}50%{box-shadow:0 0 28px rgba(200,150,42,.9)}}
+.tl-dot.pending{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.1)}
+.tl-info{padding:4px 0 18px}
+.tl-label{font-size:13px;font-weight:700;color:#fff}
+.tl-label.pending{color:rgba(255,255,255,.3)}
+.tl-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
+
+/* Detail rows */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media(max-width:400px){.detail-grid{grid-template-columns:1fr}}
+.detail-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 14px}
+.di-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.di-value{font-size:14px;font-weight:600;color:#fff}
+
+/* Book again */
+.book-again{background:rgba(200,150,42,.1);border:1px solid rgba(200,150,42,.2);border-radius:10px;padding:18px 20px;text-align:center;margin-top:16px}
+.ba-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px}
+.ba-sub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:14px}
+.ba-btn{background:var(--gold);color:var(--navy);border:none;padding:11px 24px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:.2s;text-decoration:none;display:inline-block}
+.ba-btn:hover{background:var(--gold2)}
+
+/* Footer */
+footer{text-align:center;padding:24px;border-top:1px solid rgba(255,255,255,.05);margin-top:8px}
+.ft-brand{font-family:'Playfair Display',serif;font-size:14px;color:#fff;font-weight:700;margin-bottom:4px}
+.ft-sub{font-size:12px;color:rgba(255,255,255,.25)}
+.ft-links{display:flex;gap:20px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.ft-link{font-size:12px;color:var(--gold);text-decoration:none;opacity:.6}
+.ft-link:hover{opacity:1}
+
+/* Toast */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:#fff;color:var(--navy);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;transition:.3s;opacity:0;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <span class="nav-eagle">🦅</span>
+    <div>
+      <div class="nav-brand">Blessd Cargo Moves</div>
+      <div class="nav-sub">Parcel Tracking</div>
+    </div>
+  </div>
+  <a href="book.html" class="nav-back">← Book a delivery</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Live Tracking</div>
+  <div class="hero-title">Where is your parcel?</div>
+  <div class="hero-sub">Enter your tracking ID to see the live status of your parcel</div>
+  <div class="search-box">
+    <div class="search-wrap">
+      <input class="search-input" id="track-input" placeholder="e.g. ZIM0001" maxlength="10" onkeydown="if(event.key==='Enter')trackParcel()">
+      <button class="search-btn" onclick="trackParcel()">Track →</button>
+    </div>
+    <div class="search-hint">Your tracking ID was sent to you on WhatsApp when you booked</div>
+  </div>
+</div>
+
+<main>
+  <!-- Default state -->
+  <div id="default-state" class="state-box">
+    <div class="state-icon">📦</div>
+    <div class="state-title">Enter your tracking ID above</div>
+    <div class="state-sub">Your unique tracking ID looks like <strong style="color:var(--gold);font-family:'Space Mono',monospace">ZIM0001</strong><br>You received it via WhatsApp when you booked.</div>
+  </div>
+
+  <!-- Loading state -->
+  <div id="loading-state" class="state-box" style="display:none">
+    <div class="state-icon">🔍</div>
+    <div class="state-title">Searching…</div>
+    <div class="state-sub">Looking up your parcel</div>
+  </div>
+
+  <!-- Not found -->
+  <div id="notfound-state" class="state-box" style="display:none">
+    <div class="state-icon">❓</div>
+    <div class="state-title">Parcel not found</div>
+    <div class="state-sub">We could not find a parcel with that tracking ID.<br>Please check the ID and try again, or contact us on WhatsApp.</div>
+  </div>
+
+  <!-- Result -->
+  <div id="result-state" style="display:none">
+    <div class="result-card">
+      <div class="rc-header">
+        <div class="rc-barcode" id="r-barcode">—</div>
+        <div class="rc-name" id="r-name">—</div>
+        <div class="rc-dest" id="r-dest">—</div>
+      </div>
+      <div class="rc-body">
+        <div class="status-big" id="r-status-badge">—</div>
+        <div class="timeline" id="r-timeline"></div>
+        <div class="detail-grid" id="r-details"></div>
+      </div>
+    </div>
+    <div class="book-again">
+      <div class="ba-title">Need to send more?</div>
+      <div class="ba-sub">Book your next delivery in minutes</div>
+      <a href="book.html" class="ba-btn">Book a Delivery →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="ft-brand">Blessd Cargo Moves 🦅</div>
+  <div class="ft-sub">Safe · Fast · Reliable</div>
+  <div class="ft-links">
+    <a href="book.html" class="ft-link">Book Delivery</a>
+    <a href="track.html" class="ft-link">Track Parcel</a>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOuXTABQYtV1nQElDATErXeRF5UNceNViEaCT1PKi0pZZ6qRcWtrUV4bEDqxZA7FH_/exec';
+
+const STATUS_ORDER = ['Collected','In Transit','At Border','Delivered'];
+const STATUS_EMOJI = {'Collected':'✅','In Transit':'🚚','At Border':'🛂','Delivered':'🎉'};
+const STATUS_MSG   = {
+  'Collected':   'Your parcel has been collected and is ready for departure.',
+  'In Transit':  'Your parcel is on the road and moving toward its destination.',
+  'At Border':   'Your parcel is at the border being processed by customs.',
+  'Delivered':   'Your parcel has been delivered successfully. Thank you for choosing Blessd Cargo Moves!',
+};
+const STATUS_BADGE_CLS = {'Collected':'sb-collected','In Transit':'sb-transit','At Border':'sb-border','Delivered':'sb-delivered'};
+
+// Check URL param on load
+window.addEventListener('DOMContentLoaded',()=>{
+  const params = new URLSearchParams(window.location.search);
+  const ref    = params.get('ref');
+  if(ref){ document.getElementById('track-input').value=ref.toUpperCase(); trackParcel(); }
+});
+
+async function trackParcel(){
+  const input = document.getElementById('track-input').value.trim().toUpperCase();
+  if(!input){ toast('Please enter a tracking ID'); return; }
+
+  showState('loading');
+  try{
+    const res = await fetch(`${SCRIPT_URL}?action=trackParcel&barcode=${encodeURIComponent(input)}`,{redirect:'follow'});
+    const data = await res.json();
+    if(data.error){ showState('notfound'); return; }
+    if(!data.found){ showState('notfound'); return; }
+    renderResult(data.booking);
+    showState('result');
+  }catch(e){
+    showState('notfound');
+  }
+}
+
+function showState(state){
+  ['default-state','loading-state','notfound-state','result-state'].forEach(id=>{
+    document.getElementById(id).style.display='none';
+  });
+  document.getElementById(state+'-state').style.display='block';
+}
+
+function renderResult(b){
+  const barcode = b['Barcode']||'—';
+  const name    = b['Customer Name']||'—';
+  const dest    = b['Destination']||'—';
+  const status  = b['Status']||'Collected';
+  const weight  = b['Weight (kg)']||'—';
+  const price   = b['Price (R)']||'—';
+  const payment = b['Payment']||'—';
+  const depDate = b['Departure Date']||'';
+  const ts      = b['Timestamp']||'';
+
+  document.getElementById('r-barcode').textContent = barcode;
+  document.getElementById('r-name').textContent    = name;
+  document.getElementById('r-dest').textContent    = `→ ${dest} · ${weight}kg`;
+
+  // Status badge
+  const sb = document.getElementById('r-status-badge');
+  sb.className = 'status-big '+(STATUS_BADGE_CLS[status]||'');
+  sb.textContent = (STATUS_EMOJI[status]||'📦')+' '+status;
+
+  // Timeline
+  const currentIdx = STATUS_ORDER.indexOf(status);
+  document.getElementById('r-timeline').innerHTML = STATUS_ORDER.map((s,i)=>{
+    const isDone    = i < currentIdx;
+    const isCurrent = i === currentIdx;
+    const isPending = i > currentIdx;
+    const cls = isCurrent?'current':isDone?'done':'pending';
+    return `<div class="tl-step">
+      <div class="tl-dot ${cls}">${isDone||isCurrent?STATUS_EMOJI[s]:'○'}</div>
+      <div class="tl-info">
+        <div class="tl-label ${isPending?'pending':''}">${s}</div>
+        <div class="tl-sub">${isCurrent?STATUS_MSG[s]:isDone?'Completed':''}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Details
+  const depStr = depDate ? new Date(depDate+'T00:00:00').toLocaleDateString('en-ZA',{day:'numeric',month:'short',year:'numeric'}) : '—';
+  const bookedStr = ts ? new Date(ts).toLocaleDateString('en-ZA',{day:'numeric',month:'short'}) : '—';
+  document.getElementById('r-details').innerHTML = [
+    {label:'Destination', value:dest},
+    {label:'Weight',      value:weight+'kg'},
+    {label:'Payment',     value:payment},
+    {label:'Departure',   value:depStr},
+    {label:'Tracking ID', value:barcode},
+    {label:'Booked on',   value:bookedStr},
+  ].map(d=>`<div class="detail-item"><div class="di-label">${d.label}</div><div class="di-value">${d.value}</div></div>`).join('');
+}
+
+let tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.className='show';clearTimeout(tt);tt=setTimeout(()=>el.className='',2500)}
+</script>
+</body>
+</html>
