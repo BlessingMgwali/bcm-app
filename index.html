@@ -54,16 +54,22 @@
             border-right: 1px solid var(--border-subtle);
         }
 
-        /* Abstract Premium Geometric Accents */
+        /* Integrated Custom Visual Badge Asset Background Layer */
         .visual-panel::before {
             content: '';
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(229, 169, 60, 0.05) 0%, transparent 70%);
-            top: 15%;
-            left: 15%;
-            animation: float 8s ease-in-out infinite alternate;
+            width: 450px;
+            height: 450px;
+            background-image: url('unnamed.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.12;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            animation: slowRotate 40s linear infinite;
         }
 
         /* Brand Identity Elements */
@@ -73,21 +79,23 @@
         }
 
         .logo-container {
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(229, 169, 60, 0.2);
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(229, 169, 60, 0.25);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
         }
 
+        /* Loaded User Asset: realistic_eagle_logo.png */
         .logo-container img {
-            width: 50px;
-            height: auto;
+            width: 85px;
+            height: 85px;
             object-fit: contain;
         }
 
@@ -99,6 +107,7 @@
             color: var(--text-main);
             line-height: 1.3;
             text-transform: uppercase;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         .brand-divider {
@@ -245,10 +254,10 @@
             color: var(--primary-gold);
         }
 
-        /* Subtle Background Animation */
-        @keyframes float {
-            0% { transform: translateY(0px) scale(1); }
-            100% { transform: translateY(-20px) scale(1.05); }
+        /* Subtle Ambient Rotation for the Badge Background */
+        @keyframes slowRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         /* Premium Shake Keyframes for Invalid Authentication */
@@ -266,6 +275,7 @@
             .visual-panel { flex: none; padding: 4rem 2rem 2rem 2rem; border-right: none; border-bottom: 1px solid var(--border-subtle); }
             .form-panel { flex: 1; padding: 3rem 1.5rem; }
             .brand-title { font-size: 1.8rem; }
+            .visual-panel::before { width: 300px; height: 300px; }
         }
     </style>
 </head>
@@ -275,7 +285,7 @@
         <div class="visual-panel">
             <div class="brand-wrapper">
                 <div class="logo-container">
-                    <img src="https://img.icons8.com/color/96/000000/eagle.png" alt="Blessd Cargo Movers Logo">
+                    <img src="realistic_eagle_logo.png" alt="Blessd Cargo Movers Premium Logo">
                 </div>
                 <h1 class="brand-title">Blessd Cargo<br>Movers</h1>
                 <div class="brand-divider"></div>
@@ -312,4 +322,51 @@
         function toggleVisibility() {
             const passwordField = document.getElementById('gatekeeperPassword');
             const toggleIcon = document.querySelector('.toggle-password');
-            if (passwordField
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.textContent = '🔒';
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
+
+        function verifyGatekeeper(event) {
+            event.preventDefault();
+            const passwordField = document.getElementById('gatekeeperPassword');
+            const loginCard = document.querySelector('.login-card');
+            const token = passwordField.value;
+
+            // System access token validation logic
+            if (token === "0102") {
+                // Hardware-accelerated interface transition fadeout 
+                loginCard.style.opacity = '0';
+                loginCard.style.transition = 'opacity 0.4s ease';
+                setTimeout(() => {
+                    window.location.href = "book.html";
+                }, 400);
+            } else {
+                // Inline runtime state changes highlighting bad syntax 
+                passwordField.style.borderColor = '#ef4444';
+                passwordField.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.2)';
+                
+                // Clear state vectors and play interactive container shake
+                loginCard.style.animation = 'none';
+                void loginCard.offsetWidth; // Recalculate canvas boundaries to reset keyframes
+                loginCard.style.animation = 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both';
+                
+                // Display structural warning indicators
+                passwordField.value = '';
+                passwordField.placeholder = 'Invalid Access Token - Denied';
+                
+                // Reset styling definitions safely via background threads
+                setTimeout(() => {
+                    passwordField.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    passwordField.style.boxShadow = 'none';
+                    passwordField.placeholder = 'Access Token / Password';
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
