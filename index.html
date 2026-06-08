@@ -1,983 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>BLESSD CARGO MOVES</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --navy:#0D1F35;--navy2:#162840;
-  --gold:#C8962A;--gold-light:#FDF3E0;--gold-border:#E8C97A;
-  --green:#0A6B48;--green-light:#E8F5EF;
-  --red:#9B2335;--red-light:#FDEAEA;
-  --text:#0D1F35;--text2:#3D5068;--text3:#7A90A8;
-  --border:#DDE6F0;--bg:#F5F7FA;--card:#FFFFFF;
-  --radius:8px;--shadow:0 1px 3px rgba(13,31,53,.07),0 4px 16px rgba(13,31,53,.04);
-}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased}
-code{font-family:'Space Mono',monospace;font-size:12px}
-.app{display:flex;flex-direction:column;min-height:100vh}
-header{background:var(--navy);color:#fff;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--gold)}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-mark{height:38px;width:38px;border:2px solid var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.logo-text{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff}
-.logo-sub{font-size:10px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-top:1px}
-.header-right{display:flex;align-items:center;gap:10px}
-.sync-btn{background:rgba(200,150,42,.15);border:1px solid rgba(200,150,42,.35);color:var(--gold);padding:7px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px;font-weight:500}
-.sync-btn:hover{background:rgba(200,150,42,.25)}
-.dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;flex-shrink:0}
-.dot.spin{background:var(--gold);animation:blink .7s infinite}
-.dot.err{background:#ef5350}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.lock-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:7px 12px;border-radius:6px;font-size:13px;cursor:pointer}
-.lock-btn:hover{border-color:var(--gold);color:var(--gold)}
-.btn-new{background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.btn-new:hover{background:#b8851f}
-nav{background:var(--navy2);border-bottom:1px solid rgba(200,150,42,.2);display:flex;overflow-x:auto;scrollbar-width:none;position:sticky;top:64px;z-index:90}
-nav::-webkit-scrollbar{display:none}
-.nav-tab{padding:14px 18px;font-size:11px;font-weight:600;color:rgba(255,255,255,.45);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;border-top:none;border-left:none;border-right:none;background:none;font-family:'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;transition:.15s}
-.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-.nav-tab:hover:not(.active){color:rgba(255,255,255,.75)}
-.page-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--gold-border);display:flex;align-items:center;justify-content:space-between}
-main{padding:24px;max-width:960px;margin:0 auto;width:100%}
-.section{display:none}.section.active{display:block}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px}
-.metric{background:var(--card);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);border:1px solid var(--border);border-top:3px solid var(--gold)}
-.metric-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-weight:600}
-.metric-value{font-size:24px;font-weight:700;color:var(--navy);font-family:'Space Mono',monospace;line-height:1}
-.metric-sub{font-size:11px;color:var(--text3);margin-top:6px}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
-.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to right,#FAFBFD,#fff)}
-.card-title{font-size:11px;font-weight:700;color:var(--navy);letter-spacing:.06em;text-transform:uppercase}
-.card-body{padding:20px}
-.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
-th{padding:10px 14px;text-align:left;color:var(--text3);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid var(--border);background:var(--bg);white-space:nowrap}
-td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tbody tr:hover{background:#FAFBFD}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap;letter-spacing:.04em;text-transform:uppercase}
-.b-collected{background:#E3EEF9;color:#1A5C9E}
-.b-transit{background:#EDE7F6;color:#4527A0}
-.b-border{background:#FFF3E0;color:#E65100}
-.b-delivered{background:var(--green-light);color:var(--green)}
-.b-paid{background:var(--green-light);color:var(--green)}
-.b-pending{background:var(--gold-light);color:#7A5A00}
-.b-cod{background:#F3E5F5;color:#6A1B9A}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
-.field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em}
-.field input,.field select{border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;width:100%;transition:.15s}
-.field input:focus,.field select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,150,42,.12)}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);font-family:'Inter',sans-serif;transition:.15s}
-.btn:hover{background:var(--bg)}
-.btn-primary{background:var(--navy);color:#fff;border-color:var(--navy)}
-.btn-primary:hover{background:var(--navy2)}
-.btn-gold{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700}
-.btn-gold:hover{background:#b8851f}
-.btn-danger{background:var(--red-light);color:var(--red);border-color:#EDBBBB}
-.btn-success{background:var(--green-light);color:var(--green);border-color:#A8D5C2}
-.btn-sm{padding:6px 12px;font-size:11px;border-radius:5px}
-.btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.status-select{border:1px solid var(--border);border-radius:5px;padding:5px 8px;font-size:11px;font-family:'Inter',sans-serif;background:#fff;color:var(--text);cursor:pointer;font-weight:600}
-.wa-box{background:#E9FBE5;border-radius:0 12px 12px 12px;padding:14px 16px;font-size:13px;line-height:1.8;color:#111;border:1px solid #C5E8BF;margin:14px 0;white-space:pre-wrap;max-width:380px}
-.p-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px}
-.p-row:last-child{border-bottom:none}
-.p-label{color:var(--text2)}
-.p-amount{font-weight:700;font-family:'Space Mono',monospace;font-size:13px}
-.p-amount.pos{color:var(--green)}.p-amount.neg{color:var(--red)}
-.p-total{font-size:17px;font-weight:700;padding-top:14px;border-top:2px solid var(--gold-border);display:flex;justify-content:space-between;font-family:'Playfair Display',serif}
-.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.flow-step{padding:8px 14px;border-radius:5px;font-size:11px;font-weight:600;background:var(--bg);border:1px solid var(--border);color:var(--text3);text-align:center;letter-spacing:.03em;text-transform:uppercase}
-.flow-step.active{background:var(--gold-light);color:#7A5A00;border-color:var(--gold-border)}
-.flow-step .fc{display:block;font-size:20px;font-weight:700;font-family:'Space Mono',monospace;margin-bottom:2px}
-.flow-arrow{color:var(--text3);font-size:14px}
-.search-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.search-row input,.search-row select{border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:#fff}
-.search-row input{flex:1;min-width:160px}
-.search-row input:focus,.search-row select:focus{outline:none;border-color:var(--gold)}
-.bar-row{margin-bottom:12px}
-.bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
-.bar-track{background:var(--bg);border-radius:3px;height:6px;overflow:hidden;border:1px solid var(--border)}
-.bar-fill{height:100%;border-radius:3px;background:var(--gold);transition:width .4s}
-.empty{padding:36px;text-align:center;color:var(--text3);font-size:13px}
-.empty-icon{font-size:32px;margin-bottom:8px;opacity:.5}
-.msg{padding:10px 14px;border-radius:6px;font-size:13px;margin-top:12px;border-left:3px solid}
-.msg.ok{background:var(--green-light);color:var(--green);border-color:var(--green)}
-.msg.err{background:var(--red-light);color:var(--red);border-color:var(--red)}
-.msg.info{background:var(--gold-light);color:#7A5A00;border-color:var(--gold)}
-.proh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin:12px 0}
-.proh-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;background:#fff;transition:.15s;user-select:none}
-.proh-item:hover{border-color:var(--gold);background:var(--gold-light)}
-.proh-item.hi{border-color:#EDBBBB;background:var(--red-light)}
-.proh-item.hi label{color:var(--red);font-weight:600}
-.proh-item input{width:16px;height:16px;accent-color:var(--red);cursor:pointer;flex-shrink:0}
-.warn-box{background:var(--red-light);border:1px solid #EDBBBB;border-left:3px solid var(--red);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--red);margin-top:10px;white-space:pre-line;display:none}
-.bulk-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px}
-.bulk-row:last-child{border-bottom:none}
-.bulk-row input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:var(--navy);flex-shrink:0}
-.sel-all{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:10px 14px;background:var(--gold-light);border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;color:#7A5A00;border:1px solid var(--gold-border)}
-.sel-all input{width:17px;height:17px;accent-color:var(--navy);cursor:pointer}
-.msg-card{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:10px}
-.msg-card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.msg-card-name{font-weight:700;color:var(--navy);font-size:13px}
-.msg-card-body{white-space:pre-wrap;font-size:12px;color:var(--text2);line-height:1.7;background:#fff;border-radius:5px;padding:10px;border:1px solid var(--border)}
-.broadcast-box{background:var(--navy);border-radius:8px;padding:18px;color:#fff;margin-bottom:14px;border:1px solid rgba(200,150,42,.3)}
-.bc-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
-.bc-sub{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:12px}
-.bc-msg{background:rgba(255,255,255,.06);border-radius:6px;padding:12px;font-size:13px;color:#fff;white-space:pre-wrap;line-height:1.7;border:1px solid rgba(255,255,255,.1)}
-#pin-screen{position:fixed;inset:0;background:var(--navy);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-#pin-screen.hidden{display:none}
-.pw-logo{font-size:48px;margin-bottom:14px}
-.pw-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;text-align:center}
-.pw-line{width:48px;height:2px;background:var(--gold);margin:12px auto 10px}
-.pw-sub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:28px;text-align:center}
-.pw-wrap{position:relative;width:100%;max-width:320px;margin-bottom:12px}
-.pw-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(200,150,42,.3);border-radius:8px;color:#fff;font-size:15px;padding:14px 48px 14px 16px;font-family:'Inter',sans-serif;outline:none;transition:.2s}
-.pw-input:focus{border-color:var(--gold);background:rgba(200,150,42,.08)}
-.pw-input::placeholder{color:rgba(255,255,255,.25)}
-.pw-eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;font-size:17px;padding:4px}
-.pw-eye:hover{color:var(--gold)}
-.pw-btn{width:100%;max-width:320px;background:var(--gold);border:none;border-radius:8px;color:var(--navy);font-size:13px;font-weight:700;padding:14px;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;transition:.2s}
-.pw-btn:hover{background:#b8851f}
-.pw-shake{animation:shake .4s}
-@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
-.pw-err{color:#FF8A80;font-size:12px;margin-top:6px;min-height:18px;text-align:center;width:100%;max-width:320px}
-.pw-forgot{color:rgba(255,255,255,.3);font-size:12px;margin-top:16px;cursor:pointer;text-decoration:underline}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;z-index:9999;transition:.3s;opacity:0;pointer-events:none;border:1px solid rgba(200,150,42,.3);white-space:nowrap}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* TRIP DATES */
-.trip-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
-.trip-card.open{border-left:4px solid var(--gold)}
-.trip-info{flex:1}
-.trip-label{font-weight:700;font-size:14px;color:var(--navy)}
-.trip-sub{font-size:12px;color:var(--text3);margin-top:3px}
-.pub-box{background:var(--navy);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;border:1px solid rgba(200,150,42,.3)}
-.pub-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.pub-url{font-family:'Space Mono',monospace;font-size:12px;color:#fff;word-break:break-all;margin-bottom:10px;line-height:1.6}
-.pub-sub{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:12px}
-/* PAYMENTS & MODAL */
-.pending-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:12px}
-.pending-row:last-child{border-bottom:none}
-.pending-info{flex:1;min-width:0}
-.pending-name{font-weight:700;font-size:13px;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pending-sub{font-size:11px;color:var(--text3);margin-top:2px}
-.pending-amt{font-weight:700;font-family:'Space Mono',monospace;color:var(--gold);font-size:14px;flex-shrink:0}
-.confirm-pay-btn{background:var(--green-light);color:var(--green);border:1px solid #A8D5C2;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;white-space:nowrap}
-.confirm-pay-btn:hover{background:#c8ede1}
-.view-btn{background:var(--gold-light);color:#7A5A00;border:1px solid var(--gold-border);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0}
-.view-btn:hover{background:#f5e9c8}
-/* Modal */
-#booking-modal{position:fixed;inset:0;background:rgba(13,31,53,.6);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
-#booking-modal.open{display:flex}
-.modal-box{background:var(--card);border-radius:12px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(13,31,53,.3);border:1px solid var(--border)}
-.modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to right,var(--navy),var(--navy2));border-radius:12px 12px 0 0}
-.modal-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff}
-.modal-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
-.modal-close:hover{background:rgba(255,255,255,.2)}
-.modal-body{padding:20px}
-.detail-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
-.detail-row:last-child{border-bottom:none}
-.detail-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
-.detail-value{font-weight:600;color:var(--navy);text-align:right;max-width:65%}
-.modal-actions{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap}
-.outstanding-banner{background:var(--red-light);border:1px solid #EDBBBB;border-left:4px solid var(--red);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
-.ob-label{font-size:12px;color:var(--red);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
-.ob-amount{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--red)}
-@media(max-width:600px){header{padding:0 16px;height:58px}nav{top:58px}main{padding:16px}.metrics{grid-template-columns:1fr 1fr}.metric-value{font-size:20px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blessd Cargo Movers - Secure Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #0b1329;
+            --bg-surface: rgba(28, 37, 65, 0.4);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --primary-gold: #e5a93c;
+            --primary-hover: #cca353;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Split Screen Layout */
+        .portal-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Left Side: Brand Visual Panel */
+        .visual-panel {
+            flex: 1.2;
+            background: radial-gradient(circle at 30% 30%, #1c2541 0%, #0b1329 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 3rem;
+            border-right: 1px solid var(--border-subtle);
+        }
+
+        /* Abstract Premium Geometric Accents */
+        .visual-panel::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(229, 169, 60, 0.05) 0%, transparent 70%);
+            top: 15%;
+            left: 15%;
+            animation: float 8s ease-in-out infinite alternate;
+        }
+
+        /* Brand Identity Elements */
+        .brand-wrapper {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .logo-container {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(229, 169, 60, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-container img {
+            width: 50px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .brand-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--text-main);
+            line-height: 1.3;
+            text-transform: uppercase;
+        }
+
+        .brand-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--primary-gold);
+            margin: 1.5rem auto;
+            border-radius: 2px;
+        }
+
+        .brand-tagline {
+            font-size: 1rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            font-weight: 400;
+        }
+
+        /* Right Side: Interaction Form */
+        .form-panel {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            background: #070c19;
+            position: relative;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .form-header p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Custom Input Styling */
+        .input-group {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-field {
+            width: 100%;
+            padding: 1.1rem 3.5rem 1.1rem 1.2rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .password-field::placeholder {
+            color: #475569;
+        }
+
+        .password-field:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 0 4px rgba(229, 169, 60, 0.15);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 1.2rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            user-select: none;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Action Buttons */
+        .unlock-button {
+            width: 100%;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, var(--primary-gold) 0%, #bd8422 100%);
+            border: none;
+            border-radius: 12px;
+            color: #0b1329;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(229, 169, 60, 0.2);
+        }
+
+        .unlock-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(229, 169, 60, 0.4);
+        }
+
+        .unlock-button:active {
+            transform: translateY(0);
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .forgot-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .forgot-link:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Subtle Background Animation */
+        @keyframes float {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-20px) scale(1.05); }
+        }
+
+        /* Premium Shake Keyframes for Invalid Authentication */
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Responsive UI Adjustments */
+        @media (max-width: 968px) {
+            body { overflow-y: auto; }
+            .portal-container { flex-direction: column; }
+            .visual-panel { flex: none; padding: 4rem 2rem 2rem 2rem; border-right: none; border-bottom: 1px solid var(--border-subtle); }
+            .form-panel { flex: 1; padding: 3rem 1.5rem; }
+            .brand-title { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 <body>
 
-<div id="pin-screen">
-  <div class="pw-logo">🦅</div>
-  <div class="pw-title">BLESSD CARGO MOVES</div>
-  <div class="pw-line"></div>
-  <div class="pw-sub">Enter your password to continue</div>
-  <div class="pw-wrap">
-    <input class="pw-input" id="pw-input" type="password" placeholder="Password…" onkeydown="if(event.key==='Enter')checkPw()">
-    <button class="pw-eye" onclick="togglePw()" id="pw-eye">👁</button>
-  </div>
-  <button class="pw-btn" onclick="checkPw()">Unlock</button>
-  <div class="pw-err" id="pw-err"></div>
-  <div class="pw-forgot" onclick="pwForgot()">Forgot password?</div>
-</div>
-
-<div class="app">
-<header>
-  <div class="logo">
-    <div class="logo-mark">🦅</div>
-    <div>
-      <div class="logo-text">Blessd Cargo Moves</div>
-      <div class="logo-sub">Safe · Fast · Reliable</div>
-    </div>
-  </div>
-  <div class="header-right">
-    <button class="sync-btn" onclick="syncAll()"><span class="dot" id="sync-dot"></span><span id="sync-label">Sync</span></button>
-    <button class="lock-btn" onclick="lockApp()">🔒</button>
-    <button class="btn-new" onclick="showTab('add')">+ New Booking</button>
-  </div>
-</header>
-
-<nav>
-  <button class="nav-tab active" onclick="showTab('overview')" id="tab-overview">📊 Overview</button>
-  <button class="nav-tab" onclick="showTab('bookings')" id="tab-bookings">📦 Bookings</button>
-  <button class="nav-tab" onclick="showTab('add')" id="tab-add">➕ Add Booking</button>
-  <button class="nav-tab" onclick="showTab('expenses')" id="tab-expenses">💸 Expenses</button>
-  <button class="nav-tab" onclick="showTab('profits')" id="tab-profits">💰 Profits</button>
-  <button class="nav-tab" onclick="showTab('bulk')" id="tab-bulk">📢 Bulk Updates</button>
-  <button class="nav-tab" onclick="showTab('trips')" id="tab-trips">🗓 Trip Dates</button>
-  <button class="nav-tab" onclick="showTab('payments')" id="tab-payments">💳 Payments</button>
-</nav>
-
-<main>
-
-<!-- OVERVIEW -->
-<div class="section active" id="section-overview">
-  <div class="page-title"><span>Operations Overview</span><span style="font-size:13px;font-weight:400;font-family:'Inter',sans-serif;color:var(--text3)" id="ov-date"></span></div>
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Total Bookings</div><div class="metric-value" id="m-total">—</div><div class="metric-sub">this trip</div></div>
-    <div class="metric"><div class="metric-label">Paid Revenue</div><div class="metric-value" id="m-rev">—</div><div class="metric-sub">collected</div></div>
-    <div class="metric"><div class="metric-label">COD Pending</div><div class="metric-value" id="m-cod">—</div><div class="metric-sub">on delivery</div></div>
-    <div class="metric"><div class="metric-label">Net Profit</div><div class="metric-value" id="m-profit">—</div><div class="metric-sub">after expenses</div></div>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">Parcel Journey</span></div>
-    <div class="card-body"><div class="flow" id="status-flow"></div></div>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">Status Breakdown</span></div>
-    <div class="card-body" id="status-bars"><div class="empty"><div class="empty-icon">📊</div>Press Sync to load data</div></div>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">Recent Bookings</span><button class="btn btn-sm" onclick="showTab('bookings')">View all</button></div>
-    <div class="table-wrap"><table><thead><tr><th>Barcode</th><th>Customer</th><th>Destination</th><th>Amount</th><th>Status</th></tr></thead><tbody id="recent-tbody"></tbody></table></div>
-  </div>
-</div>
-
-<!-- BOOKINGS -->
-<div class="section" id="section-bookings">
-  <div class="page-title"><span>Bookings Register</span><button class="btn btn-sm" onclick="exportCSV()">⬇ Export Manifest</button></div>
-  <div class="search-row">
-    <input type="search" id="search-q" placeholder="Search name, barcode, destination…" oninput="renderBookings()">
-    <select id="filter-status" onchange="renderBookings()">
-      <option value="">All statuses</option>
-      <option>Collected</option><option>In Transit</option><option>At Border</option><option>Delivered</option>
-    </select>
-    <select id="filter-pay" onchange="renderBookings()">
-      <option value="">All payments</option><option>Paid</option><option>COD</option><option>Pending</option>
-    </select>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title" id="bookings-count">All Bookings</span></div>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Barcode</th><th>Customer</th><th>Phone</th><th>Destination</th><th>Weight</th><th>Amount</th><th>Payment</th><th>Status</th><th></th></tr></thead>
-      <tbody id="bookings-tbody"></tbody>
-    </table></div>
-    <div id="bookings-empty" class="empty" style="display:none"><div class="empty-icon">📦</div>No bookings found</div>
-  </div>
-</div>
-
-<!-- ADD BOOKING -->
-<div class="section" id="section-add">
-  <div class="page-title">New Booking</div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">Customer & Parcel Details</span></div>
-    <div class="card-body">
-      <div class="form-grid">
-        <div class="field"><label>Customer Name *</label><input id="f-name" placeholder="Full name" type="text"></div>
-        <div class="field"><label>Phone Number *</label><input id="f-phone" placeholder="+27 or 07x" type="tel"></div>
-      </div>
-      <div class="form-grid">
-        <div class="field"><label>Destination *</label><select id="f-dest">
-            <optgroup label="🇿🇼 Zimbabwe">
-              <option>Harare</option><option>Bulawayo</option><option>Mutare</option>
-              <option>Gweru</option><option>Masvingo</option><option>Kwekwe</option>
-              <option>Kadoma</option><option>Bindura</option><option>Chinhoyi</option><option>Other Zimbabwe</option>
-            </optgroup>
-            <optgroup label="🇿🇦 South Africa">
-              <option>Johannesburg</option><option>Cape Town</option><option>Durban</option>
-              <option>Pretoria</option><option>Port Elizabeth</option><option>Bloemfontein</option>
-              <option>East London</option><option>Polokwane</option><option>Nelspruit</option>
-              <option>Rustenburg</option><option>Kimberley</option><option>Soweto</option>
-              <option>Sandton</option><option>Midrand</option><option>Germiston</option>
-              <option>Benoni</option><option>Boksburg</option><option>Other SA</option>
-            </optgroup>
-          </select></div>
-        <div class="field"><label>Weight (kg) *</label><input id="f-weight" placeholder="e.g. 12" type="number" min="0.5" step="0.5"></div>
-      </div>
-      <div class="form-grid">
-        <div class="field"><label>Price (R) *</label><input id="f-price" placeholder="e.g. 700" type="number" min="0"></div>
-        <div class="field"><label>Payment Type *</label><select id="f-payment"><option>Paid</option><option>COD</option><option>Pending</option></select></div>
-      </div>
-      <div class="form-grid">
-        <div class="field"><label>Departure Date</label><input id="f-date" type="date"></div>
-        <div class="field"><label>Parcel Contents *</label><input id="f-notes" placeholder="e.g. Clothes, cooking oil, rice"></div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">⚠️ Prohibited Items Declaration</span></div>
-    <div class="card-body">
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Tick any items the customer is sending. High-risk items may cause border delays or confiscation of the entire truck.</p>
-      <div class="proh-grid" id="proh-grid"></div>
-      <div class="warn-box" id="warn-box"></div>
-      <div style="margin-top:14px;display:flex;align-items:flex-start;gap:8px">
-        <input type="checkbox" id="f-terms" style="width:16px;height:16px;accent-color:var(--navy);margin-top:2px;flex-shrink:0">
-        <label for="f-terms" style="font-size:12px;color:var(--text2);cursor:pointer;line-height:1.5">Customer declares all contents are accurate and confirms that Blessd Cargo Moves is not liable for any prohibited or undeclared items.</label>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-gold" onclick="submitBooking()">✅ Confirm & Add Booking</button>
-        <button class="btn" onclick="clearForm()">Clear</button>
-      </div>
-      <div id="add-msg" style="display:none"></div>
-    </div>
-  </div>
-  <div class="card" id="wa-card" style="display:none">
-    <div class="card-header"><span class="card-title">📱 WhatsApp Confirmation</span><button class="btn btn-sm btn-success" onclick="copyWA()">📋 Copy</button></div>
-    <div class="card-body"><div class="wa-box" id="wa-text"></div><p style="font-size:12px;color:var(--text3);margin-top:8px">Copy and send to customer via WhatsApp Business.</p></div>
-  </div>
-</div>
-
-<!-- EXPENSES -->
-<div class="section" id="section-expenses">
-  <div class="page-title">Trip Expenses</div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">Record Expense</span></div>
-    <div class="card-body">
-      <div class="form-grid">
-        <div class="field"><label>Description</label><input id="e-name" placeholder="Fuel, Border fees, Driver pay…"></div>
-        <div class="field"><label>Amount (R)</label><input id="e-amount" placeholder="e.g. 4500" type="number" min="0"></div>
-      </div>
-      <button class="btn btn-primary" onclick="submitExpense()">+ Add Expense</button>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">Expense Ledger</span></div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>Description</th><th>Amount</th><th>Date</th><th></th></tr></thead><tbody id="expenses-tbody"></tbody></table></div>
-    <div id="expenses-empty" class="empty" style="display:none"><div class="empty-icon">💸</div>No expenses recorded</div>
-  </div>
-  <div class="metrics" style="margin-top:16px">
-    <div class="metric"><div class="metric-label">Total Expenses</div><div class="metric-value" id="e-total">R0</div></div>
-    <div class="metric"><div class="metric-label">Total Revenue</div><div class="metric-value" id="e-revenue">R0</div></div>
-    <div class="metric"><div class="metric-label">Net Profit</div><div class="metric-value" id="e-profit">R0</div></div>
-  </div>
-</div>
-
-<!-- PROFITS -->
-<div class="section" id="section-profits">
-  <div class="page-title">Financial Summary</div>
-  <div class="card"><div class="card-header"><span class="card-title">Profit & Loss Statement</span></div><div class="card-body" id="profit-body"></div></div>
-  <div class="card"><div class="card-header"><span class="card-title">Status Distribution</span></div><div class="card-body" id="profit-bars"></div></div>
-  <div class="card"><div class="card-header"><span class="card-title">SARS Tax Estimate</span><span class="badge b-pending">Estimate only</span></div><div class="card-body" id="tax-body"></div></div>
-</div>
-
-<!-- BULK UPDATES -->
-<div class="section" id="section-bulk">
-  <div class="page-title">Bulk Customer Updates</div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">Step 1 — New Status</span></div>
-    <div class="card-body">
-      <div class="field"><label>Update selected parcels to</label>
-        <select id="bulk-status" onchange="renderBulkList()">
-          <option value="">— Choose status —</option>
-          <option>Collected</option><option>In Transit</option><option>At Border</option><option>Delivered</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><span class="card-title">Step 2 — Select Customers</span><span id="bulk-count" class="badge b-collected" style="display:none"></span></div>
-    <div class="card-body">
-      <div class="sel-all" onclick="toggleSelectAll()">
-        <input type="checkbox" id="sel-all-chk" onclick="event.stopPropagation();toggleSelectAll()">
-        <span>Select all customers</span>
-      </div>
-      <div id="bulk-list"><div class="empty"><div class="empty-icon">📦</div>Choose a status above</div></div>
-    </div>
-  </div>
-  <div class="card" id="bulk-actions" style="display:none">
-    <div class="card-header"><span class="card-title">Step 3 — Take Action</span></div>
-    <div class="card-body">
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="applyBulkStatus()">✅ Update Status in Sheets</button>
-        <button class="btn btn-gold" onclick="generateBulkMessages()">📨 Individual Messages</button>
-        <button class="btn" onclick="generateBroadcast()">📢 Broadcast Message</button>
-      </div>
-      <p style="font-size:12px;color:var(--text3);margin-top:12px;line-height:1.7"><strong>Update Status</strong> — saves to Google Sheets for all selected.<br><strong>Individual Messages</strong> — personalised per customer.<br><strong>Broadcast</strong> — one message for your WhatsApp Broadcast list.</p>
-    </div>
-  </div>
-  <div id="bulk-msgs-section" style="display:none">
-    <div class="card">
-      <div class="card-header"><span class="card-title">📨 Individual Messages</span><button class="btn btn-sm" onclick="document.getElementById('bulk-msgs-section').style.display='none'">Hide</button></div>
-      <div class="card-body"><p style="font-size:13px;color:var(--text2);margin-bottom:14px">Copy each message and paste into the customer's WhatsApp chat.</p><div id="bulk-msgs-list"></div></div>
-    </div>
-  </div>
-  <div id="broadcast-section" style="display:none">
-    <div class="card">
-      <div class="card-header"><span class="card-title">📢 Broadcast Message</span><button class="btn btn-sm btn-gold" onclick="copyBroadcast()">📋 Copy</button></div>
-      <div class="card-body">
-        <div class="broadcast-box">
-          <div class="bc-title">How to send on WhatsApp Business</div>
-          <div class="bc-sub">New Broadcast → Add recipients → Paste this message → Send</div>
-          <div class="bc-msg" id="bc-msg"></div>
+    <div class="portal-container">
+        <div class="visual-panel">
+            <div class="brand-wrapper">
+                <div class="logo-container">
+                    <img src="https://img.icons8.com/color/96/000000/eagle.png" alt="Blessd Cargo Movers Logo">
+                </div>
+                <h1 class="brand-title">Blessd Cargo<br>Movers</h1>
+                <div class="brand-divider"></div>
+                <p class="brand-tagline">Secure Logistics & Supply Chain Management</p>
+            </div>
         </div>
-        <p style="font-size:12px;color:var(--text3)">⚠️ Customers must have your number saved to receive broadcasts.</p>
-      </div>
+
+        <div class="form-panel">
+            <div class="login-card">
+                <div class="form-header">
+                    <h2>System Access</h2>
+                    <p>Enter gateway credentials to initialize application state.</p>
+                </div>
+
+                <form id="gatekeeperForm" onsubmit="verifyGatekeeper(event)">
+                    <div class="input-group">
+                        <div class="input-wrapper">
+                            <input type="password" id="gatekeeperPassword" class="password-field" placeholder="Access Token / Password" required>
+                            <span class="toggle-password" onclick="toggleVisibility()">👁️</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="unlock-button">AUTHENTICATE</button>
+                </form>
+
+                <div class="footer-links">
+                    <a href="#" class="forgot-link" onclick="alert('Please contact the primary system administrator for recovery tokens.')">Need support accessing the terminal?</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- TRIP DATES -->
-<div class="section" id="section-trips">
-  <div class="page-title">Trip Dates Manager</div>
-
-  <!-- Public booking link -->
-  <div class="pub-box">
-    <div class="pub-title">🌐 Your Public Booking Page</div>
-    <div class="pub-url" id="pub-link-display">Loading…</div>
-    <div class="pub-sub">Share this link with customers. They will only see the dates you have added and set to Open.</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-gold btn-sm" onclick="copyPubLink()">📋 Copy Link</button>
-      <button class="btn btn-sm" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)" onclick="openPubPage()">🔗 Open Page</button>
-    </div>
-  </div>
-
-  <!-- Add new trip date -->
-  <div class="card">
-    <div class="card-header"><span class="card-title">Add New Trip Date</span></div>
-    <div class="card-body">
-      <div class="form-grid">
-        <div class="field"><label>Trip Date *</label><input type="date" id="t-date"></div>
-        <div class="field"><label>Trip Name / Route *</label><input type="text" id="t-name" placeholder="e.g. Harare Run, SA Local Deliveries"></div>
-      </div>
-      <div class="form-grid">
-        <div class="field"><label>Departure Time</label><input type="time" id="t-time" value="06:00"></div>
-        <div class="field"><label>Slots Available</label><input type="number" id="t-slots" placeholder="e.g. 20" min="1" value="20"></div>
-      </div>
-      <div class="field" style="margin-bottom:14px"><label>Notes for customers</label><input type="text" id="t-notes" placeholder="e.g. Cutoff for booking is Thursday 18:00"></div>
-      <button class="btn btn-gold" onclick="addTripDate()">+ Add Trip Date</button>
-    </div>
-  </div>
-
-  <!-- Trip dates list -->
-  <div class="card">
-    <div class="card-header"><span class="card-title">Upcoming Trip Dates</span><span id="trips-count" class="badge b-collected"></span></div>
-    <div class="card-body" id="trips-list"><div class="empty"><div class="empty-icon">🗓</div>No trip dates added yet</div></div>
-  </div>
-
-  <!-- How it works -->
-  <div class="card">
-    <div class="card-header"><span class="card-title">ℹ️ How this works</span></div>
-    <div class="card-body">
-      <ol style="padding-left:18px;font-size:13px;color:var(--text2);line-height:2">
-        <li>Add your upcoming trip dates here and set them to <strong>Open</strong></li>
-        <li>Share your public booking link with customers on WhatsApp, Facebook, TikTok</li>
-        <li>Customers open the link, choose their trip date, fill in their details and submit</li>
-        <li>Their booking appears in your <strong>Bookings</strong> tab automatically</li>
-        <li>When a trip is full or closed, set it to <strong>Closed</strong> — it disappears from the public page</li>
-        <li>After the trip, delete it to keep your list clean</li>
-      </ol>
-    </div>
-  </div>
-</div>
-
-<!-- PAYMENTS -->
-<div class="section" id="section-payments">
-  <div class="page-title">Payment Control</div>
-
-  <!-- Outstanding banner -->
-  <div class="outstanding-banner" id="outstanding-banner">
-    <div>
-      <div class="ob-label">Total Outstanding</div>
-      <div style="font-size:12px;color:var(--red);margin-top:2px">Pending + COD not yet collected</div>
-    </div>
-    <div class="ob-amount" id="outstanding-total">R0</div>
-  </div>
-
-  <!-- Pending payments -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Pending Payments</span>
-      <span class="badge b-pending" id="pending-count" style="display:none"></span>
-    </div>
-    <div class="card-body" id="pending-list">
-      <div class="empty"><div class="empty-icon">✅</div>No pending payments</div>
-    </div>
-  </div>
-
-  <!-- COD to collect -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">COD — To Collect on Delivery</span>
-      <span class="badge b-cod" id="cod-count" style="display:none"></span>
-    </div>
-    <div class="card-body" id="cod-list">
-      <div class="empty"><div class="empty-icon">📦</div>No COD bookings</div>
-    </div>
-  </div>
-
-  <!-- All paid -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Confirmed Paid</span>
-      <span class="badge b-paid" id="paid-count" style="display:none"></span>
-    </div>
-    <div class="card-body" id="paid-list">
-      <div class="empty"><div class="empty-icon">💰</div>No paid bookings yet</div>
-    </div>
-  </div>
-</div>
-
-</main>
-</div>
-
-<!-- BOOKING DETAIL MODAL -->
-<div id="booking-modal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <span class="modal-title" id="modal-title">Booking Details</span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-actions" id="modal-actions"></div>
-  </div>
-</div>
-
-<div id="toast"></div>
-
-<script>
-const SCRIPT_URL       = 'https://script.google.com/macros/s/AKfycbytdJ-5KS2pS84f7nxamwDjbEYVulOi6tnFr3Qa_RXIIo8raiuy5xKHM03XJXhDmfaP/exec';
-const CORRECT_PASSWORD = 'Mgwali@19!';
-const SESSION_KEY      = 'bcm_session';
-const SESSION_HOURS    = 8;
-const MAX_ATTEMPTS     = 5;
-
-let bookings=[], expenses=[], summary=null, pwAttempts=0;
-
-const STATUS_ORDER = ['Collected','In Transit','At Border','Delivered'];
-const PAY_CLS  = {Paid:'b-paid',COD:'b-cod',Pending:'b-pending'};
-const STAT_CLS = {'Collected':'b-collected','In Transit':'b-transit','At Border':'b-border','Delivered':'b-delivered'};
-const STAT_EMJ = {'Collected':'✅','In Transit':'🚚','At Border':'🛂','Delivered':'🎉'};
-
-const PROHIBITED = [
-  {label:'Fresh Meat',        risk:'high',  note:'Strictly prohibited — will be confiscated'},
-  {label:'Fresh Vegetables',  risk:'high',  note:'Requires phytosanitary certificate'},
-  {label:'Fresh Fruit',       risk:'high',  note:'Requires phytosanitary certificate'},
-  {label:'Dairy Products',    risk:'high',  note:'Prohibited without special permits'},
-  {label:'Alcohol',           risk:'medium',note:'Heavily taxed — must declare value'},
-  {label:'Prescription Meds', risk:'medium',note:'Needs documentation'},
-  {label:'Electronics',       risk:'medium',note:'Customs duty applies — declare value'},
-  {label:'Cigarettes/Tobacco',risk:'medium',note:'Quantity limits apply'},
-  {label:'Cooking Oil',       risk:'low',   note:'Allowed — import duty applies'},
-  {label:'Clothing',          risk:'low',   note:'Allowed — declare value'},
-  {label:'Rice/Flour/Sugar',  risk:'low',   note:'Allowed — quantity may affect duty'},
-  {label:'Packaged Food',     risk:'low',   note:'Allowed — must be commercially sealed'},
-];
-
-// ── Password ──────────────────────────────────────────────
-function checkSession(){try{const s=localStorage.getItem(SESSION_KEY);if(!s)return false;const{time}=JSON.parse(s);return(Date.now()-time)/3600000<SESSION_HOURS}catch(e){return false}}
-function startSession(){localStorage.setItem(SESSION_KEY,JSON.stringify({time:Date.now()}))}
-function lockApp(){localStorage.removeItem(SESSION_KEY);pwAttempts=0;document.getElementById('pw-input').value='';document.getElementById('pw-err').textContent='';document.getElementById('pin-screen').classList.remove('hidden');setTimeout(()=>document.getElementById('pw-input').focus(),100)}
-function togglePw(){const i=document.getElementById('pw-input'),b=document.getElementById('pw-eye');i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'👁':'🙈'}
-function checkPw(){
-  const input=document.getElementById('pw-input'),errEl=document.getElementById('pw-err'),val=input.value;
-  if(!val){errEl.textContent='Please enter your password.';return}
-  if(val===CORRECT_PASSWORD){startSession();document.getElementById('pin-screen').classList.add('hidden');errEl.textContent='';pwAttempts=0;input.value='';syncAll()}
-  else{pwAttempts++;input.value='';input.classList.remove('pw-shake');void input.offsetWidth;input.classList.add('pw-shake');setTimeout(()=>input.classList.remove('pw-shake'),400);
-    if(pwAttempts>=MAX_ATTEMPTS){errEl.textContent='Too many attempts. Wait 30 seconds.';input.disabled=true;document.querySelector('.pw-btn').disabled=true;setTimeout(()=>{pwAttempts=0;input.disabled=false;document.querySelector('.pw-btn').disabled=false;errEl.textContent='';input.focus()},30000)}
-    else{const l=MAX_ATTEMPTS-pwAttempts;errEl.textContent=`Wrong password. ${l} attempt${l!==1?'s':''} left.`;input.focus()}}
-}
-function pwForgot(){alert('To reset your password:\n\n1. github.com/BlessingMgwali/bcm-app\n2. Edit index.html\n3. Find: const CORRECT_PASSWORD\n4. Change the value in quotes\n5. Commit changes')}
-
-// ── API ───────────────────────────────────────────────────
-async function apiGet(a){const r=await fetch(`${SCRIPT_URL}?action=${a}`,{redirect:'follow'});return r.json()}
-async function apiPost(p){const r=await fetch(SCRIPT_URL,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain'},body:JSON.stringify(p)});return r.json()}
-
-// ── Sync ──────────────────────────────────────────────────
-async function syncAll(){
-  setSyncState('loading');
-  try{const[bR,eR,sR]=await Promise.all([apiGet('getBookings'),apiGet('getExpenses'),apiGet('getSummary')]);
-    if(bR.bookings)bookings=bR.bookings;if(eR.expenses)expenses=eR.expenses;if(sR.totalBookings!==undefined)summary=sR;
-    setSyncState('ok');renderAll();toast('✅ Synced with Google Sheets')}
-  catch(e){setSyncState('err');toast('❌ Sync failed — check connection')}
-}
-function setSyncState(s){const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');d.className='dot'+(s==='loading'?' spin':s==='err'?' err':'');l.textContent=s==='loading'?'Syncing…':s==='err'?'Error':'Synced'}
-function renderAll(){renderOverview();renderBookings();renderExpenses();renderProfits();renderPayments()}
-function fmt(v){return'R'+Math.round(Number(v)||0).toLocaleString('en-ZA')}
-
-// ── Overview ──────────────────────────────────────────────
-function renderOverview(){
-  document.getElementById('ov-date').textContent=new Date().toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  if(!summary)return;const s=summary;
-  document.getElementById('m-total').textContent=s.totalBookings||0;
-  document.getElementById('m-rev').textContent=fmt(s.paidRevenue||0);
-  document.getElementById('m-cod').textContent=fmt(s.codRevenue||0);
-  const p=s.netProfit||0,pe=document.getElementById('m-profit');pe.textContent=fmt(p);pe.style.color=p>=0?'var(--green)':'var(--red)';
-  const sc=s.statusCounts||{};
-  document.getElementById('status-flow').innerHTML=STATUS_ORDER.map((st,i)=>`${i>0?'<span class="flow-arrow">›</span>':''}<div class="flow-step ${(sc[st]||0)>0?'active':''}"><span class="fc">${sc[st]||0}</span>${st}</div>`).join('');
-  const total=s.totalBookings||0;
-  document.getElementById('status-bars').innerHTML=!total?'<div class="empty"><div class="empty-icon">📊</div>No bookings yet</div>':STATUS_ORDER.map(st=>{const n=sc[st]||0;if(!n)return'';return`<div class="bar-row"><div class="bar-label"><span>${st}</span><span>${n} parcel${n!==1?'s':''}</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(n/total*100)}%"></div></div></div>`}).join('');
-  const recent=(s.recentBookings||[]).slice(0,5);
-  document.getElementById('recent-tbody').innerHTML=recent.length?recent.map(b=>`<tr><td><code>${b['Barcode']||''}</code></td><td style="font-weight:600">${b['Customer Name']||''}</td><td>${b['Destination']||''}</td><td style="font-weight:700">R${b['Price (R)']||0}</td><td><span class="badge ${STAT_CLS[b['Status']]||''}">${b['Status']||''}</span></td></tr>`).join(''):'<tr><td colspan="5" class="empty">No bookings yet</td></tr>';
-}
-
-// ── Bookings ──────────────────────────────────────────────
-function renderBookings(){
-  const q=((document.getElementById('search-q').value)||'').toLowerCase(),stF=document.getElementById('filter-status').value,pyF=document.getElementById('filter-pay').value;
-  let list=bookings.filter(b=>{const ok1=!q||[b['Customer Name'],b['Barcode'],b['Destination'],b['Phone']].some(v=>String(v||'').toLowerCase().includes(q));return ok1&&(!stF||b['Status']===stF)&&(!pyF||b['Payment']===pyF)});
-  document.getElementById('bookings-count').textContent=`All Bookings (${list.length})`;
-  const tbody=document.getElementById('bookings-tbody'),empty=document.getElementById('bookings-empty');
-  if(!list.length){tbody.innerHTML='';empty.style.display='block';return}empty.style.display='none';
-  tbody.innerHTML=list.map(b=>{const bc=b['Barcode']||'';return`<tr><td><code>${bc}</code></td><td style="font-weight:600">${b['Customer Name']||''}</td><td style="color:var(--text2)">${b['Phone']||''}</td><td>${b['Destination']||''}</td><td>${b['Weight (kg)']||''}kg</td><td style="font-weight:700">R${b['Price (R)']||0}</td><td><span class="badge ${PAY_CLS[b['Payment']]||''}">${b['Payment']||''}</span></td><td><select class="status-select" onchange="changeStatus('${bc}',this.value)">${STATUS_ORDER.map(s=>`<option${s===b['Status']?' selected':''}>${s}</option>`).join('')}</select></td><td><button class="btn btn-sm btn-danger" onclick="removeBooking('${bc}')">🗑</button></td></tr>`}).join('');
-}
-async function changeStatus(barcode,newStatus){const b=bookings.find(x=>x['Barcode']===barcode);if(b)b['Status']=newStatus;renderBookings();renderOverview();try{await apiPost({action:'updateStatus',barcode,status:newStatus});toast('✅ Status updated');syncAll()}catch(e){toast('❌ Update failed')}}
-async function removeBooking(barcode){if(!confirm('Delete booking '+barcode+'?'))return;bookings=bookings.filter(b=>b['Barcode']!==barcode);renderBookings();renderOverview();try{await apiPost({action:'deleteBooking',barcode});toast('✅ Deleted');syncAll()}catch(e){}}
-
-// ── Prohibited items ──────────────────────────────────────
-function buildProhGrid(){
-  document.getElementById('proh-grid').innerHTML=PROHIBITED.map((item,i)=>`<div class="proh-item ${item.risk==='high'?'hi':''}" onclick="document.getElementById('pi${i}').click()"><input type="checkbox" id="pi${i}" data-risk="${item.risk}" data-note="${item.note}" onclick="event.stopPropagation();checkProh()"><label for="pi${i}" style="cursor:pointer">${item.label}</label></div>`).join('');
-}
-function checkProh(){
-  const checked=[...document.querySelectorAll('#proh-grid input:checked')];
-  const high=checked.filter(c=>c.dataset.risk==='high'),med=checked.filter(c=>c.dataset.risk==='medium');
-  const wb=document.getElementById('warn-box');
-  if(!checked.length){wb.style.display='none';return}
-  let msg='';
-  if(high.length){msg+='⛔ HIGH RISK — these will likely be confiscated at Beitbridge:\n';high.forEach(c=>msg+=`• ${c.nextElementSibling.textContent}: ${c.dataset.note}\n`)}
-  if(med.length){msg+='\n⚠️ Items requiring declaration:\n';med.forEach(c=>msg+=`• ${c.nextElementSibling.textContent}: ${c.dataset.note}\n`)}
-  wb.textContent=msg.trim();wb.style.display='block';
-}
-
-// ── Add booking ───────────────────────────────────────────
-async function submitBooking(){
-  const name=document.getElementById('f-name').value.trim(),phone=document.getElementById('f-phone').value.trim(),dest=document.getElementById('f-dest').value,weight=parseFloat(document.getElementById('f-weight').value),price=parseFloat(document.getElementById('f-price').value),pay=document.getElementById('f-payment').value,date=document.getElementById('f-date').value,notes=document.getElementById('f-notes').value.trim(),terms=document.getElementById('f-terms').checked;
-  if(!name||!phone||!weight||!price||!notes){showMsg('⚠️ Please fill in all required fields including parcel contents.','err');return}
-  if(!terms){showMsg('⚠️ Customer must agree to the declaration before proceeding.','err');return}
-  const highRisk=[...document.querySelectorAll('#proh-grid input:checked')].filter(c=>c.dataset.risk==='high');
-  if(highRisk.length&&!confirm('⛔ WARNING: High-risk prohibited items are ticked.\n\nThis may cause the entire truck to be held at the border.\n\nAre you sure you want to proceed?'))return;
-  showMsg('Adding booking…','info');
-  try{const res=await apiPost({action:'addBooking',data:{name,phone,destination:dest,weight,price,payment:pay,departureDate:date,notes}});if(res.error)throw new Error(res.error);showMsg('✅ Booking confirmed. Barcode: '+res.barcode,'ok');showWA({name,dest,weight,price,pay,date,barcode:res.barcode});clearForm(false);syncAll()}
-  catch(e){showMsg('❌ Failed: '+e.message,'err')}
-}
-function showMsg(text,type){const el=document.getElementById('add-msg');el.style.display='block';el.className='msg '+type;el.textContent=text}
-function showWA(b){const d=b.date?new Date(b.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long'}):'To be confirmed';document.getElementById('wa-text').textContent=`✅ Booking Confirmed — Blessd Cargo Moves\n\nDear ${b.name},\n\nYour parcel has been registered.\n\n📦 Tracking ID: ${b.barcode}\n📍 Destination: ${b.dest}\n⚖️  Weight: ${b.weight}kg\n💰 Amount: R${b.price} (${b.pay})\n🚚 Departure: ${d}\n\nReply with your Tracking ID for status updates.\n\nSafe · Fast · Reliable 🦅\n— Blessd Cargo Moves`;document.getElementById('wa-card').style.display='block'}
-function copyWA(){navigator.clipboard.writeText(document.getElementById('wa-text').textContent).then(()=>toast('📋 Message copied!'))}
-function clearForm(hideWA=true){['f-name','f-phone','f-weight','f-price','f-date','f-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-dest').value='Harare';document.getElementById('f-payment').value='Paid';document.getElementById('f-terms').checked=false;document.getElementById('add-msg').style.display='none';document.getElementById('warn-box').style.display='none';document.querySelectorAll('#proh-grid input').forEach(c=>c.checked=false);if(hideWA)document.getElementById('wa-card').style.display='none'}
-
-// ── Expenses ──────────────────────────────────────────────
-async function submitExpense(){const name=document.getElementById('e-name').value.trim(),amount=parseFloat(document.getElementById('e-amount').value);if(!name||!amount){toast('Fill in description and amount');return}try{await apiPost({action:'addExpense',data:{name,amount}});document.getElementById('e-name').value='';document.getElementById('e-amount').value='';toast('✅ Expense saved');syncAll()}catch(e){toast('❌ Failed to save')}}
-async function removeExpense(index){expenses=expenses.filter(e=>e.index!=index);renderExpenses();try{await apiPost({action:'deleteExpense',index});syncAll()}catch(e){}}
-function renderExpenses(){
-  const tbody=document.getElementById('expenses-tbody'),empty=document.getElementById('expenses-empty');
-  const totalExp=expenses.reduce((s,e)=>s+(parseFloat(e.amount)||0),0),totalRev=bookings.reduce((s,b)=>s+(parseFloat(b['Price (R)'])||0),0),profit=totalRev-totalExp;
-  document.getElementById('e-total').textContent=fmt(totalExp);document.getElementById('e-revenue').textContent=fmt(totalRev);const ep=document.getElementById('e-profit');ep.textContent=fmt(profit);ep.style.color=profit>=0?'var(--green)':'var(--red)';
-  if(!expenses.length){tbody.innerHTML='';empty.style.display='block';return}empty.style.display='none';
-  tbody.innerHTML=expenses.map((e,i)=>`<tr><td style="color:var(--text3)">${i+1}</td><td style="font-weight:500">${e.name}</td><td style="font-weight:700">R${parseFloat(e.amount).toLocaleString()}</td><td style="color:var(--text3);font-size:12px">${e.date?new Date(e.date).toLocaleDateString('en-ZA'):''}</td><td><button class="btn btn-sm btn-danger" onclick="removeExpense(${e.index})">🗑</button></td></tr>`).join('');
-}
-
-// ── Profits ───────────────────────────────────────────────
-function renderProfits(){
-  const totalRev=bookings.reduce((s,b)=>s+(parseFloat(b['Price (R)'])||0),0),paidRev=bookings.filter(b=>b['Payment']==='Paid').reduce((s,b)=>s+(parseFloat(b['Price (R)'])||0),0),codRev=bookings.filter(b=>b['Payment']==='COD').reduce((s,b)=>s+(parseFloat(b['Price (R)'])||0),0),pendRev=bookings.filter(b=>b['Payment']==='Pending').reduce((s,b)=>s+(parseFloat(b['Price (R)'])||0),0),totalExp=expenses.reduce((s,e)=>s+(parseFloat(e.amount)||0),0),profit=totalRev-totalExp,weight=bookings.reduce((s,b)=>s+(parseFloat(b['Weight (kg)'])||0),0);
-  document.getElementById('profit-body').innerHTML=[{l:'Total Revenue (all bookings)',v:totalRev,c:'pos'},{l:'  ↳ Paid — in hand',v:paidRev,c:'pos'},{l:'  ↳ COD — collect on delivery',v:codRev,c:'pos'},{l:'  ↳ Pending — awaiting payment',v:pendRev,c:'pos'},{l:'Total Expenses',v:totalExp,c:'neg'},{l:'Total Bookings',v:bookings.length,c:'',meta:true},{l:'Total Weight',v:weight.toFixed(1)+'kg',c:'',meta:true}].map(r=>`<div class="p-row"><span class="p-label">${r.l}</span><span class="p-amount ${r.c}">${r.meta?r.v:fmt(r.v)}</span></div>`).join('')+`<div class="p-total"><span>Net Profit</span><span class="p-amount ${profit>=0?'pos':'neg'}">${fmt(profit)}</span></div>`;
-  const total=bookings.length,sc={};STATUS_ORDER.forEach(s=>sc[s]=bookings.filter(b=>b['Status']===s).length);
-  document.getElementById('profit-bars').innerHTML=!total?'<div class="empty"><div class="empty-icon">📦</div>No bookings yet</div>':STATUS_ORDER.map(st=>{const n=sc[st]||0;if(!n)return'';return`<div class="bar-row"><div class="bar-label"><span>${st}</span><span>${n}</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(n/total*100)}%"></div></div></div>`}).join('');
-  const ap=profit*26;let tax=0,bracket='';
-  if(ap<=95750){tax=0;bracket='Below threshold — R0 tax owed'}else if(ap<=237100){tax=(ap-95750)*0.18;bracket='18% bracket'}else if(ap<=370500){tax=25452+(ap-237100)*0.26;bracket='26% bracket'}else{tax=25452+34694+(ap-370500)*0.31;bracket='31% bracket'}
-  document.getElementById('tax-body').innerHTML=`<p style="font-size:13px;color:var(--text2);margin-bottom:14px">Projected over 26 trips/year. Consult a registered accountant for accurate advice.</p><div class="p-row"><span class="p-label">This trip profit</span><span class="p-amount">${fmt(profit)}</span></div><div class="p-row"><span class="p-label">Estimated annual profit (×26 trips)</span><span class="p-amount">${fmt(ap)}</span></div><div class="p-row"><span class="p-label">SARS bracket</span><span class="p-amount">${bracket}</span></div><div class="p-row" style="border-top:2px solid var(--gold-border);padding-top:12px;margin-top:4px"><span class="p-label" style="font-weight:700">Estimated annual tax</span><span class="p-amount neg">${fmt(tax)}</span></div><div class="p-row"><span class="p-label">Set aside per trip</span><span class="p-amount neg">${fmt(tax/26)}</span></div>`;
-}
-
-// ── Bulk updates ──────────────────────────────────────────
-function renderBulkList(){
-  const status=document.getElementById('bulk-status').value,list=document.getElementById('bulk-list'),card=document.getElementById('bulk-actions');
-  document.getElementById('bulk-msgs-section').style.display='none';document.getElementById('broadcast-section').style.display='none';document.getElementById('sel-all-chk').checked=false;
-  if(!status){list.innerHTML='<div class="empty"><div class="empty-icon">📦</div>Choose a status above</div>';card.style.display='none';return}
-  if(!bookings.length){list.innerHTML='<div class="empty"><div class="empty-icon">📦</div>No bookings yet</div>';card.style.display='none';return}
-  card.style.display='block';
-  list.innerHTML=bookings.map(b=>`<div class="bulk-row"><input type="checkbox" class="bulk-chk" data-bc="${b['Barcode']}" onchange="updateBulkCount()"><div style="flex:1"><div style="font-weight:600;font-size:13px;color:var(--navy)">${b['Customer Name']}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${b['Barcode']} · ${b['Destination']} · R${b['Price (R)']} · Now: <strong>${b['Status']}</strong></div></div><span class="badge ${PAY_CLS[b['Payment']]||''}">${b['Payment']}</span></div>`).join('');
-  updateBulkCount();
-}
-function updateBulkCount(){const n=document.querySelectorAll('.bulk-chk:checked').length,el=document.getElementById('bulk-count');el.textContent=n+' selected';el.style.display=n?'inline-flex':'none';document.getElementById('sel-all-chk').checked=n===document.querySelectorAll('.bulk-chk').length&&n>0}
-function toggleSelectAll(){const c=document.getElementById('sel-all-chk').checked;document.querySelectorAll('.bulk-chk').forEach(x=>x.checked=c);updateBulkCount()}
-function getSelected(){const out=[];document.querySelectorAll('.bulk-chk:checked').forEach(chk=>{const b=bookings.find(x=>x['Barcode']===chk.dataset.bc);if(b)out.push(b)});return out}
-async function applyBulkStatus(){const status=document.getElementById('bulk-status').value,sel=getSelected();if(!sel.length){toast('Select at least one customer');return}if(!confirm(`Update ${sel.length} parcel${sel.length!==1?'s':''} to "${status}"?`))return;toast('Updating…');let done=0;for(const b of sel){b['Status']=status;try{await apiPost({action:'updateStatus',barcode:b['Barcode'],status});done++}catch(e){}}renderBookings();renderOverview();renderBulkList();toast(`✅ ${done} parcel${done!==1?'s':''} updated`);syncAll()}
-function generateBulkMessages(){const status=document.getElementById('bulk-status').value,sel=getSelected();if(!sel.length){toast('Select at least one customer');return}const section=document.getElementById('bulk-msgs-section'),list=document.getElementById('bulk-msgs-list');section.style.display='block';list.innerHTML=sel.map((b,i)=>{const msg=`${STAT_EMJ[status]||'📦'} Blessd Cargo Moves — Update\n\nDear ${b['Customer Name']},\n\nYour parcel status:\n*${status}*\n\n📦 Tracking ID: ${b['Barcode']}\n📍 Destination: ${b['Destination']}\n\n${status==='At Border'?'Your parcel is being processed at the border.':status==='In Transit'?'Your parcel is on its way to the destination.':status==='Delivered'?'Your parcel has been delivered. Thank you!':'We will update you on further progress.'}\n\nSafe · Fast · Reliable 🦅`;return`<div class="msg-card"><div class="msg-card-hdr"><span class="msg-card-name">${b['Customer Name']} — ${b['Barcode']}</span><button class="btn btn-sm btn-success" onclick="copyCard(${i})">📋 Copy</button></div><div class="msg-card-body" id="mc-${i}">${msg}</div></div>`}).join('');section.scrollIntoView({behavior:'smooth',block:'start'})}
-function copyCard(i){navigator.clipboard.writeText(document.getElementById('mc-'+i).textContent).then(()=>toast('📋 Copied!'))}
-function generateBroadcast(){const status=document.getElementById('bulk-status').value,sel=getSelected();if(!sel.length){toast('Select at least one customer');return}const lines=sel.map(b=>`• ${b['Barcode']} — ${b['Customer Name']} → ${b['Destination']}`).join('\n');const msg=`${STAT_EMJ[status]||'📦'} Blessd Cargo Moves — Trip Update\n\nGood day,\n\nThe following parcels are now:\n*${status}*\n\n${lines}\n\n${status==='At Border'?'We are at the border being processed.':status==='In Transit'?'We are on the road moving to the destination.':status==='Delivered'?'All parcels delivered. Thank you for trusting Blessd Cargo Moves!':'Further updates to follow.'}\n\nReply with your Tracking ID for your specific update.\nSafe · Fast · Reliable 🦅\n— Blessd Cargo Moves`;document.getElementById('bc-msg').textContent=msg;document.getElementById('broadcast-section').style.display='block';document.getElementById('broadcast-section').scrollIntoView({behavior:'smooth',block:'start'})}
-function copyBroadcast(){navigator.clipboard.writeText(document.getElementById('bc-msg').textContent).then(()=>toast('📢 Broadcast copied!'))}
-
-// ── Export ────────────────────────────────────────────────
-function exportCSV(){if(!bookings.length){toast('No bookings to export');return}const h=['Barcode','Customer Name','Phone','Destination','Weight (kg)','Price (R)','Payment','Status','Departure Date'];const rows=bookings.map(b=>h.map(k=>`"${(b[k]||'').toString().replace(/"/g,'""')}"`).join(','));const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent([h.join(','),...rows].join('\n'));a.download='BCM_Manifest_'+new Date().toISOString().slice(0,10)+'.csv';a.click();toast('📥 Manifest downloaded')}
-
-// ── Nav ───────────────────────────────────────────────────
-function showTab(name){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('section-'+name).classList.add('active');document.getElementById('tab-'+name).classList.add('active');if(name==='bulk')renderBulkList();if(name==='trips')renderTripDates()}
-
-// ── Toast ─────────────────────────────────────────────────
-let toastTimer;
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.className='show';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='',3000)}
-
-// ══════════════════════════════════════════════════════════
-//  TRIP DATES — now stored in Google Sheets
-// ══════════════════════════════════════════════════════════
-async function addTripDate(){
-  const date  = document.getElementById('t-date').value;
-  const name  = document.getElementById('t-name').value.trim();
-  const time  = document.getElementById('t-time').value;
-  const slots = parseInt(document.getElementById('t-slots').value)||20;
-  const notes = document.getElementById('t-notes').value.trim();
-  if(!date||!name){ toast('Please fill in trip date and name'); return; }
-  toast('Saving trip date…');
-  try{
-    await apiPost({action:'addTripDate', data:{name,date,time,slots,notes}});
-    document.getElementById('t-date').value='';
-    document.getElementById('t-name').value='';
-    document.getElementById('t-notes').value='';
-    document.getElementById('t-slots').value='20';
-    toast('✅ Trip date saved to Sheets');
-    await loadAndRenderTrips();
-  } catch(e){ toast('❌ Failed to save trip date'); }
-}
-
-async function toggleTripStatus(id, currentStatus){
-  const newStatus = currentStatus==='open'?'closed':'open';
-  try{
-    await apiPost({action:'updateTripDate', id, status:newStatus});
-    toast('✅ Trip '+(newStatus==='open'?'opened':'closed'));
-    await loadAndRenderTrips();
-  } catch(e){ toast('❌ Failed to update trip'); }
-}
-
-async function deleteTripDate(id){
-  if(!confirm('Delete this trip date?')) return;
-  try{
-    await apiPost({action:'deleteTripDate', id});
-    toast('Trip date deleted');
-    await loadAndRenderTrips();
-  } catch(e){ toast('❌ Failed to delete'); }
-}
-
-async function loadAndRenderTrips(){
-  try{
-    const res = await apiGet('getTripDates');
-    renderTripDates(res.trips||[]);
-  } catch(e){ renderTripDates([]); }
-}
-
-function renderTripDates(trips){
-  const list  = document.getElementById('trips-list');
-  const count = document.getElementById('trips-count');
-  count.textContent = (trips.length||0) + ' trip' + (trips.length!==1?'s':'');
-
-  const pubUrl = window.location.origin + window.location.pathname.replace('index.html','').replace(/\/$/, '') + '/book.html';
-  document.getElementById('pub-link-display').textContent = pubUrl;
-
-  if(!trips||!trips.length){ list.innerHTML='<div class="empty"><div class="empty-icon">🗓</div>No trip dates yet — add your first one above</div>'; return; }
-
-  list.innerHTML = trips.map(t=>{
-    const dateStr = t.date ? new Date(t.date+'T00:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
-    const isOpen  = t.status==='open';
-    const spotsLeft = (parseInt(t.slots)||20) - (parseInt(t.booked)||0);
-    return `<div class="trip-card ${isOpen?'open':''}">
-      <div class="trip-info">
-        <div class="trip-label">${t.name||'—'}</div>
-        <div class="trip-sub">📅 ${dateStr} ${t.time?'· 🕐 '+t.time:''} · ${spotsLeft} spot${spotsLeft!==1?'s':''} left${t.notes?' · '+t.notes:''}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:12px">
-        <span class="badge ${isOpen?'b-paid':'b-pending'}">${isOpen?'Open':'Closed'}</span>
-        <button class="btn btn-sm ${isOpen?'btn-danger':'btn-success'}" onclick="toggleTripStatus('${t.id}','${t.status}')">${isOpen?'Close':'Open'}</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteTripDate('${t.id}')">🗑</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function copyPubLink(){
-  const url = window.location.origin + window.location.pathname.replace('index.html','').replace(/\/$/, '') + '/book.html';
-  navigator.clipboard.writeText(url).then(()=>toast('📋 Public booking link copied!'));
-}
-
-function openPubPage(){
-  const url = window.location.origin + window.location.pathname.replace('index.html','').replace(/\/$/, '') + '/book.html';
-  window.open(url,'_blank');
-}
-
-// ── Nav ───────────────────────────────────────────────────
-function showTab(name){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('section-'+name).classList.add('active');
-  document.getElementById('tab-'+name).classList.add('active');
-  if(name==='bulk')renderBulkList();
-  if(name==='trips')loadAndRenderTrips();
-  if(name==='payments')renderPayments();
-}
-
-// ══════════════════════════════════════════════════════════
-//  PAYMENTS
-// ══════════════════════════════════════════════════════════
-function renderPayments(){
-  const pending  = bookings.filter(b=>b['Payment']==='Pending');
-  const cod      = bookings.filter(b=>b['Payment']==='COD');
-  const paid     = bookings.filter(b=>b['Payment']==='Paid');
-  const outstanding = [...pending,...cod].reduce((s,b)=>s+(parseFloat(b['Price (R)'])||0),0);
-
-  // Banner
-  document.getElementById('outstanding-total').textContent = fmt(outstanding);
-  document.getElementById('outstanding-banner').style.borderLeftColor = outstanding>0?'var(--red)':'var(--green)';
-  document.getElementById('outstanding-banner').style.background = outstanding>0?'var(--red-light)':'var(--green-light)';
-  document.getElementById('outstanding-total').style.color = outstanding>0?'var(--red)':'var(--green)';
-
-  // Pending count badge
-  const pc = document.getElementById('pending-count');
-  pc.textContent = pending.length+' unpaid'; pc.style.display = pending.length?'inline-flex':'none';
-
-  // COD count badge
-  const cc = document.getElementById('cod-count');
-  cc.textContent = cod.length+' COD'; cc.style.display = cod.length?'inline-flex':'none';
-
-  // Paid count badge
-  const padc = document.getElementById('paid-count');
-  padc.textContent = paid.length+' paid'; padc.style.display = paid.length?'inline-flex':'none';
-
-  renderPaymentList('pending-list', pending, 'pending');
-  renderPaymentList('cod-list', cod, 'cod');
-  renderPaymentList('paid-list', paid, 'paid');
-}
-
-function renderPaymentList(elId, list, type){
-  const el = document.getElementById(elId);
-  if(!list.length){
-    const icons = {pending:'✅', cod:'📦', paid:'💰'};
-    const msgs  = {pending:'No pending payments — all clear!', cod:'No COD bookings', paid:'No paid bookings yet'};
-    el.innerHTML=`<div class="empty"><div class="empty-icon">${icons[type]}</div>${msgs[type]}</div>`;
-    return;
-  }
-  el.innerHTML = list.map(b=>`
-    <div class="pending-row">
-      <div class="pending-info">
-        <div class="pending-name">${b['Customer Name']||''}</div>
-        <div class="pending-sub">${b['Barcode']||''} · ${b['Destination']||''} · ${b['Weight (kg)']||''}kg</div>
-      </div>
-      <div class="pending-amt">R${b['Price (R)']||0}</div>
-      <button class="view-btn" onclick="openModal('${b['Barcode']}')">View</button>
-      ${type!=='paid'?`<button class="confirm-pay-btn" onclick="confirmPaid('${b['Barcode']}')">✅ Mark Paid</button>`:''}
-    </div>`).join('');
-}
-
-async function confirmPaid(barcode){
-  if(!confirm('Confirm payment received for '+barcode+'?')) return;
-  const b = bookings.find(x=>x['Barcode']===barcode);
-  if(!b) return;
-  b['Payment'] = 'Paid';
-  renderPayments();
-  renderBookings();
-  renderOverview();
-  try{
-    // Update sheet payment via a status update — we pass a special marker
-    await apiPost({action:'updatePayment', barcode, payment:'Paid'});
-    toast('✅ Payment confirmed — marked as Paid!');
-    syncAll();
-  } catch(e){ toast('⚠️ Updated locally — sync to save to Sheets'); }
-}
-
-// ══════════════════════════════════════════════════════════
-//  BOOKING DETAIL MODAL
-// ══════════════════════════════════════════════════════════
-function openModal(barcode){
-  const b = bookings.find(x=>x['Barcode']===barcode);
-  if(!b) return;
-
-  document.getElementById('modal-title').textContent = b['Barcode'] + ' — ' + (b['Customer Name']||'');
-
-  const fields = [
-    {label:'Customer Name',  value: b['Customer Name']||'—'},
-    {label:'Phone',          value: b['Phone']||'—'},
-    {label:'Destination',    value: b['Destination']||'—'},
-    {label:'Weight',         value: (b['Weight (kg)']||'—')+'kg'},
-    {label:'Price',          value: 'R'+(b['Price (R)']||0)},
-    {label:'Payment',        value: b['Payment']||'—'},
-    {label:'Status',         value: b['Status']||'—'},
-    {label:'Departure Date', value: b['Departure Date']||'—'},
-    {label:'Parcel Contents',value: b['notes']||b['Notes']||'—'},
-    {label:'Booked On',      value: b['Timestamp']?new Date(b['Timestamp']).toLocaleDateString('en-ZA',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—'},
-  ];
-
-  document.getElementById('modal-body').innerHTML = fields.map(f=>`
-    <div class="detail-row">
-      <span class="detail-label">${f.label}</span>
-      <span class="detail-value"><span class="badge ${f.label==='Payment'?(PAY_CLS[f.value]||''):f.label==='Status'?(STAT_CLS[f.value]||''):''}">${f.value}</span></span>
-    </div>`).join('');
-
-  // Actions
-  const isPaid = b['Payment']==='Paid';
-  document.getElementById('modal-actions').innerHTML = `
-    <div style="width:100%">
-      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Update Status</div>
-      <select id="modal-status-sel" style="border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;width:100%;margin-bottom:10px">
-        ${STATUS_ORDER.map(s=>`<option${s===b['Status']?' selected':''}>${s}</option>`).join('')}
-      </select>
-      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;margin-top:6px">Update Payment</div>
-      <select id="modal-pay-sel" style="border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;width:100%;margin-bottom:14px">
-        <option${b['Payment']==='Paid'?' selected':''}>Paid</option>
-        <option${b['Payment']==='COD'?' selected':''}>COD</option>
-        <option${b['Payment']==='Pending'?' selected':''}>Pending</option>
-      </select>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-gold" style="flex:1" onclick="saveModalChanges('${barcode}')">💾 Save Changes</button>
-        <button class="btn btn-danger" style="flex:1" onclick="closeModal()">Cancel</button>
-      </div>
-    </div>`;
-
-  document.getElementById('booking-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-async function saveModalChanges(barcode){
-  const newStatus  = document.getElementById('modal-status-sel').value;
-  const newPayment = document.getElementById('modal-pay-sel').value;
-  const b = bookings.find(x=>x['Barcode']===barcode);
-  if(!b) return;
-
-  const statusChanged  = b['Status']  !== newStatus;
-  const paymentChanged = b['Payment'] !== newPayment;
-
-  b['Status']  = newStatus;
-  b['Payment'] = newPayment;
-
-  closeModal();
-  renderBookings();
-  renderOverview();
-  renderPayments();
-
-  try{
-    if(statusChanged)  await apiPost({action:'updateStatus',  barcode, status:newStatus});
-    if(paymentChanged) await apiPost({action:'updatePayment', barcode, payment:newPayment});
-    toast('✅ Booking updated successfully');
-    syncAll();
-  } catch(e){ toast('⚠️ Updated locally — press Sync to save to Sheets'); }
-}
-
-function closeModal(){
-  document.getElementById('booking-modal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// Close modal when clicking outside
-document.addEventListener('click', e=>{
-  if(e.target.id==='booking-modal') closeModal();
-});
-
-// ── Boot ──────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded',()=>{
-  buildProhGrid();
-  if(checkSession()){document.getElementById('pin-screen').classList.add('hidden');syncAll()}
-  else{setTimeout(()=>document.getElementById('pw-input').focus(),100)}
-  setInterval(()=>{if(!document.hidden&&checkSession())syncAll()},60000);
-});
-</script>
-</body>
-</html>
+    <script>
+        function toggleVisibility() {
+            const passwordField = document.getElementById('gatekeeperPassword');
+            const toggleIcon = document.querySelector('.toggle-password');
+            if (passwordField
