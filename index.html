@@ -1,372 +1,333 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blessd Cargo Movers - Secure Portal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>BLESSD CARGO - Secure Logistics Gateway</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#afcdbd",
+                      "on-secondary": "#3c2f00",
+                      "inverse-primary": "#496457",
+                      "on-tertiary-container": "#8a8f79",
+                      "tertiary-fixed": "#e0e5cc",
+                      "primary-fixed": "#cbead8",
+                      "secondary-container": "#af8d11",
+                      "secondary-fixed-dim": "#e9c349",
+                      "primary-fixed-dim": "#afcdbd",
+                      "inverse-surface": "#e2e2e7",
+                      "on-surface-variant": "#c2c8c3",
+                      "on-secondary-fixed-variant": "#574500",
+                      "surface-container": "#1e2023",
+                      "on-secondary-container": "#342800",
+                      "surface-container-lowest": "#0c0e12",
+                      "outline": "#8c928d",
+                      "on-primary": "#1b352a",
+                      "on-primary-container": "#769384",
+                      "surface-container-highest": "#333539",
+                      "on-primary-fixed": "#052016",
+                      "surface-dim": "#111317",
+                      "primary-container": "#0f2a1f",
+                      "outline-variant": "#424844",
+                      "surface-container-high": "#282a2e",
+                      "tertiary": "#c4c9b1",
+                      "surface-variant": "#333539",
+                      "primary": "#afcdbd",
+                      "on-error-container": "#ffdad6",
+                      "on-background": "#e2e2e7",
+                      "surface": "#111317",
+                      "on-surface": "#e2e2e7",
+                      "tertiary-container": "#222717",
+                      "on-secondary-fixed": "#241a00",
+                      "on-tertiary-fixed": "#191d0e",
+                      "surface-bright": "#37393d",
+                      "background": "#111317",
+                      "on-tertiary-fixed-variant": "#444937",
+                      "on-primary-fixed-variant": "#314c40",
+                      "error": "#ffb4ab",
+                      "secondary-fixed": "#ffe088",
+                      "inverse-on-surface": "#2e3034",
+                      "error-container": "#93000a",
+                      "tertiary-fixed-dim": "#c4c9b1",
+                      "on-tertiary": "#2e3222",
+                      "on-error": "#690005",
+                      "surface-container-low": "#1a1c1f",
+                      "secondary": "#e9c349"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "unit": "4px",
+                      "container-max": "1440px",
+                      "margin": "32px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Source Serif 4"],
+                      "headline-lg": ["Source Serif 4"],
+                      "body-md": ["Hanken Grotesk"],
+                      "label-sm": ["JetBrains Mono"],
+                      "headline-lg-mobile": ["Source Serif 4"]
+              },
+              "fontSize": {
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
     <style>
-        :root {
-            --bg-deep: #0b1329;
-            --bg-surface: rgba(28, 37, 65, 0.4);
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --primary-gold: #e5a93c;
-            --primary-hover: #cca353;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            overflow: hidden;
+            background-color: #111317;
+            color: #e2e2e7;
+            font-family: 'Hanken Grotesk', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* Split Screen Layout */
-        .portal-container {
-            display: flex;
-            width: 100%;
-            min-height: 100vh;
+        @keyframes forestSway {
+            0% { transform: scale(1.1) translate(0, 0) rotate(0deg); }
+            33% { transform: scale(1.12) translate(-5px, 5px) rotate(0.2deg); }
+            66% { transform: scale(1.1) translate(5px, -2px) rotate(-0.1deg); }
+            100% { transform: scale(1.1) translate(0, 0) rotate(0deg); }
         }
 
-        /* Left Side: Brand Visual Panel */
-        .visual-panel {
-            flex: 1.2;
-            background: radial-gradient(circle at 30% 30%, #1c2541 0%, #0b1329 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 3rem;
-            border-right: 1px solid var(--border-subtle);
+        .animated-background {
+            animation: forestSway 20s ease-in-out infinite;
+            will-change: transform;
         }
 
-        /* Integrated Custom Visual Badge Asset Background Layer */
-        .visual-panel::before {
-            content: '';
+        .forest-overlay {
+            background: linear-gradient(135deg, rgba(15, 42, 31, 0.95) 0%, rgba(17, 19, 23, 0.9) 100%);
+        }
+
+        .slate-bark-card {
+            background-color: #1a1c1f;
+            border: 1px solid #1A3A2C;
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .earth-shadow {
+            box-shadow: 0 24px 60px -12px rgba(15, 42, 31, 0.4);
+        }
+
+        .gold-glow {
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 12px rgba(233, 195, 73, 0.3);
+        }
+
+        .mist-backdrop {
+            backdrop-filter: blur(12px);
+            background-color: rgba(15, 42, 31, 0.6);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .ambient-light {
             position: absolute;
-            width: 450px;
-            height: 450px;
-            background-image: url('unnamed.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.12;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            animation: slowRotate 40s linear infinite;
-        }
-
-        /* Brand Identity Elements */
-        .brand-wrapper {
-            text-align: center;
-            z-index: 2;
-        }
-
-        .logo-container {
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(229, 169, 60, 0.25);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(175, 205, 189, 0.03) 0%, transparent 70%);
             border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 2rem;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        /* Loaded User Asset: realistic_eagle_logo.png */
-        .logo-container img {
-            width: 85px;
-            height: 85px;
-            object-fit: contain;
-        }
-
-        .brand-title {
-            font-family: 'Cinzel', serif;
-            font-size: 2.25rem;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            color: var(--text-main);
-            line-height: 1.3;
-            text-transform: uppercase;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-
-        .brand-divider {
-            width: 60px;
-            height: 3px;
-            background: var(--primary-gold);
-            margin: 1.5rem auto;
-            border-radius: 2px;
-        }
-
-        .brand-tagline {
-            font-size: 1rem;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
-            font-weight: 400;
-        }
-
-        /* Right Side: Interaction Form */
-        .form-panel {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-            background: #070c19;
-            position: relative;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 24px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .form-header {
-            margin-bottom: 2.5rem;
-        }
-
-        .form-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-        }
-
-        .form-header p {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-        }
-
-        /* Custom Input Styling */
-        .input-group {
-            position: relative;
-            margin-bottom: 2rem;
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .password-field {
-            width: 100%;
-            padding: 1.1rem 3.5rem 1.1rem 1.2rem;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: var(--text-main);
-            font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .password-field::placeholder {
-            color: #475569;
-        }
-
-        .password-field:focus {
-            outline: none;
-            border-color: var(--primary-gold);
-            background: rgba(15, 23, 42, 0.9);
-            box-shadow: 0 0 0 4px rgba(229, 169, 60, 0.15);
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 1.2rem;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-size: 1.25rem;
-            user-select: none;
-            transition: color 0.2s;
-        }
-
-        .toggle-password:hover {
-            color: var(--primary-gold);
-        }
-
-        /* Action Buttons */
-        .unlock-button {
-            width: 100%;
-            padding: 1.1rem;
-            background: linear-gradient(135deg, var(--primary-gold) 0%, #bd8422 100%);
-            border: none;
-            border-radius: 12px;
-            color: #0b1329;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(229, 169, 60, 0.2);
-        }
-
-        .unlock-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(229, 169, 60, 0.4);
-        }
-
-        .unlock-button:active {
-            transform: translateY(0);
-        }
-
-        .footer-links {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .forgot-link {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.2s;
-            font-weight: 500;
-        }
-
-        .forgot-link:hover {
-            color: var(--primary-gold);
-        }
-
-        /* Subtle Ambient Rotation for the Badge Background */
-        @keyframes slowRotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Premium Shake Keyframes for Invalid Authentication */
-        @keyframes shake {
+        /* Input shake animation for failed password entries */
+        @keyframes subtleShake {
             10%, 90% { transform: translate3d(-1px, 0, 0); }
             20%, 80% { transform: translate3d(2px, 0, 0); }
             30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
-
-        /* Responsive UI Adjustments */
-        @media (max-width: 968px) {
-            body { overflow-y: auto; }
-            .portal-container { flex-direction: column; }
-            .visual-panel { flex: none; padding: 4rem 2rem 2rem 2rem; border-right: none; border-bottom: 1px solid var(--border-subtle); }
-            .form-panel { flex: 1; padding: 3rem 1.5rem; }
-            .brand-title { font-size: 1.8rem; }
-            .visual-panel::before { width: 300px; height: 300px; }
+        .shake-error {
+            animation: subtleShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
         }
     </style>
 </head>
-<body>
-
-    <div class="portal-container">
-        <div class="visual-panel">
-            <div class="brand-wrapper">
-                <div class="logo-container">
-                    <img src="realistic_eagle_logo.png" alt="Blessd Cargo Movers Premium Logo">
+<body class="antialiased min-h-screen">
+<main class="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0 overflow-hidden">
+        <img alt="Vector Backdrop Asset" class="fixed inset-0 w-full h-full object-cover z-0 animated-background opacity-20" src="unnamed.png"/>
+        <div class="absolute inset-0 forest-overlay opacity-80"></div>
+    </div>
+    
+    <div class="ambient-light top-[-10%] left-[-10%]" style="transform: translate(0px, 0px);"></div>
+    <div class="ambient-light bottom-[-10%] right-[-10%]" style="transform: translate(0px, 0px);"></div>
+    
+    <div class="relative z-10 w-full max-w-container-max mx-auto px-margin flex flex-col items-center">
+        <div class="w-full max-w-xl flex flex-col items-center text-center py-8">
+            <div class="relative mb-6 group">
+                <div class="absolute inset-0 rounded-full bg-secondary/20 blur-2xl group-hover:bg-secondary/30 transition-all duration-700"></div>
+                <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-secondary/30 earth-shadow p-1 bg-surface-container flex items-center justify-center">
+                    <img alt="Blessd Cargo Premium Eagle Logo" class="w-5/6 h-5/6 object-contain" src="realistic_eagle_logo.png"/>
                 </div>
-                <h1 class="brand-title">Blessd Cargo<br>Movers</h1>
-                <div class="brand-divider"></div>
-                <p class="brand-tagline">Secure Logistics & Supply Chain Management</p>
+            </div>
+            <div class="space-y-1 mb-4">
+                <h1 class="font-display-lg text-[32px] md:text-[40px] text-on-surface tracking-tighter uppercase leading-none">
+                    BLESSD CARGO
+                </h1>
+                <h2 class="font-display-lg text-[24px] md:text-[28px] text-secondary tracking-[0.2em] uppercase font-semibold">
+                    MOVERS
+                </h2>
+            </div>
+            <div class="w-16 h-1 bg-secondary mb-6 rounded-full mx-auto"></div>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-md leading-relaxed px-4">
+                Authoritative supply chain intelligence and secure logistics. The Evergreen Framework provides rugged, dependable infrastructure for your most critical global assets.
+            </p>
+            <div class="mt-6 flex items-center gap-3 text-on-primary-fixed-variant opacity-60">
+                <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                <span class="font-label-sm text-[10px] uppercase tracking-widest">Secure Terminal Access</span>
             </div>
         </div>
 
-        <div class="form-panel">
-            <div class="login-card">
-                <div class="form-header">
-                    <h2>System Access</h2>
-                    <p>Enter gateway credentials to initialize application state.</p>
-                </div>
-
-                <form id="gatekeeperForm" onsubmit="verifyGatekeeper(event)">
-                    <div class="input-group">
-                        <div class="input-wrapper">
-                            <input type="password" id="gatekeeperPassword" class="password-field" placeholder="Access Token / Password" required>
-                            <span class="toggle-password" onclick="toggleVisibility()">👁️</span>
+        <div class="w-full max-w-md mt-4">
+            <div class="slate-bark-card rounded-lg p-8 relative overflow-hidden group" id="auth-container-card">
+                <div class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+                <header class="mb-8 relative z-10 text-center md:text-left">
+                    <h2 class="font-headline-lg text-2xl text-on-surface mb-2">System Access</h2>
+                    <p class="font-body-md text-sm text-on-surface-variant/70">
+                        Enter gateway credentials to initialize application state.
+                    </p>
+                </header>
+                <form class="space-y-6 relative z-10" id="gatekeeperForm">
+                    <div class="space-y-2">
+                        <label class="font-label-sm text-[11px] text-primary uppercase tracking-widest block font-bold" for="token">Access Token / Password</label>
+                        <div class="relative group">
+                            <input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 text-on-surface py-4 pl-4 pr-12 transition-all placeholder:text-outline/40 font-body-md text-base" id="token" placeholder="Enter secure terminal key..." type="password" required/>
+                            <div class="absolute inset-y-0 right-4 flex items-center cursor-pointer" id="toggle-visibility-trigger">
+                                <span class="material-symbols-outlined text-secondary text-xl" style="font-variation-settings: 'FILL' 1;" id="lock-icon-element">lock</span>
+                            </div>
                         </div>
                     </div>
-
-                    <button type="submit" class="unlock-button">AUTHENTICATE</button>
+                    <button class="w-full bg-secondary hover:bg-secondary-fixed-dim active:scale-[0.98] transition-all duration-200 py-4 px-6 rounded font-label-sm text-on-secondary font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 gold-glow" type="submit" id="submit-btn">
+                        Authenticate
+                        <span class="material-symbols-outlined text-[20px]" id="btn-icon">arrow_forward</span>
+                    </button>
+                    <div class="pt-4 border-t border-outline-variant/20 flex flex-col items-center">
+                        <a class="font-label-sm text-[11px] text-on-surface-variant hover:text-secondary transition-colors duration-200 flex items-center gap-2" href="#" onclick="alert('Please contact your primary administrator for security key recovery tokens.')">
+                            <span class="material-symbols-outlined text-[14px]">support_agent</span>
+                            Need support accessing the terminal?
+                        </a>
+                    </div>
                 </form>
-
-                <div class="footer-links">
-                    <a href="#" class="forgot-link" onclick="alert('Please contact the primary system administrator for recovery tokens.')">Need support accessing the terminal?</a>
+            </div>
+            
+            <div class="mt-6 flex justify-between items-center px-4 opacity-30">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+                    <span class="font-label-sm text-[9px] uppercase tracking-tighter">Terminal ID: AX-492</span>
                 </div>
+                <span class="font-label-sm text-[9px] uppercase tracking-tighter">Global Relay: ACTIVE</span>
             </div>
         </div>
     </div>
+</main>
 
-    <script>
-        function toggleVisibility() {
-            const passwordField = document.getElementById('gatekeeperPassword');
-            const toggleIcon = document.querySelector('.toggle-password');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.textContent = '🔒';
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.textContent = '👁️';
-            }
+<div class="fixed inset-0 z-[100] mist-backdrop flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500" id="auth-success">
+    <div class="slate-bark-card p-10 text-center max-w-sm rounded-xl">
+        <span class="material-symbols-outlined text-6xl text-secondary mb-4" style="font-variation-settings: 'FILL' 1;">verified</span>
+        <h3 class="font-headline-lg text-on-surface mb-2">Access Granted</h3>
+        <p class="font-body-md text-on-surface-variant">Synchronizing supply chain telemetry...</p>
+    </div>
+</div>
+
+<script>
+    const loginForm = document.getElementById('gatekeeperForm');
+    const successOverlay = document.getElementById('auth-success');
+    const authCard = document.getElementById('auth-container-card');
+    const tokenInput = document.getElementById('token');
+    const toggleTrigger = document.getElementById('toggle-visibility-trigger');
+    const lockIcon = document.getElementById('lock-icon-element');
+
+    // Password view toggle feature
+    toggleTrigger.addEventListener('click', () => {
+        if (tokenInput.type === 'password') {
+            tokenInput.type = 'text';
+            lockIcon.textContent = 'lock_open';
+        } else {
+            tokenInput.type = 'password';
+            lockIcon.textContent = 'lock';
         }
+    });
 
-        function verifyGatekeeper(event) {
-            event.preventDefault();
-            const passwordField = document.getElementById('gatekeeperPassword');
-            const loginCard = document.querySelector('.login-card');
-            const token = passwordField.value;
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submit-btn');
+        const btnIcon = document.getElementById('btn-icon');
+        const passwordValue = tokenInput.value;
+        
+        // Setup visual validation phase state
+        btn.disabled = true;
+        btn.childNodes[0].textContent = 'Validating... ';
+        btnIcon.textContent = 'refresh';
+        btnIcon.classList.add('animate-spin');
 
-            // System access token validation logic
-            if (token === "0102") {
-                // Hardware-accelerated interface transition fadeout 
-                loginCard.style.opacity = '0';
-                loginCard.style.transition = 'opacity 0.4s ease';
+        setTimeout(() => {
+            if (passwordValue === "0102") {
+                // Correct Password Process
+                successOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                successOverlay.classList.add('opacity-100');
+                
                 setTimeout(() => {
                     window.location.href = "book.html";
-                }, 400);
+                }, 1500);
             } else {
-                // Inline runtime state changes highlighting bad syntax 
-                passwordField.style.borderColor = '#ef4444';
-                passwordField.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.2)';
+                // Incorrect Password Process — Premium Inline Failure Animation
+                btn.disabled = false;
+                btn.childNodes[0].textContent = 'Authenticate ';
+                btnIcon.textContent = 'arrow_forward';
+                btnIcon.classList.remove('animate-spin');
                 
-                // Clear state vectors and play interactive container shake
-                loginCard.style.animation = 'none';
-                void loginCard.offsetWidth; // Recalculate canvas boundaries to reset keyframes
-                loginCard.style.animation = 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both';
-                
-                // Display structural warning indicators
-                passwordField.value = '';
-                passwordField.placeholder = 'Invalid Access Token - Denied';
-                
-                // Reset styling definitions safely via background threads
+                // Set field border to failure alert color states
+                authCard.style.borderColor = '#93000a';
+                tokenInput.style.borderBottomColor = '#ffb4ab';
+                tokenInput.value = '';
+                tokenInput.placeholder = 'Invalid Token — Denied';
+
+                // Fire custom hardware accelerated canvas container shake
+                authCard.classList.remove('shake-error');
+                void authCard.offsetWidth; // Force viewport tracking recalculation
+                authCard.classList.add('shake-error');
+
+                // Return interface components cleanly to baseline configurations
                 setTimeout(() => {
-                    passwordField.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                    passwordField.style.boxShadow = 'none';
-                    passwordField.placeholder = 'Access Token / Password';
+                    authCard.style.borderColor = '#1A3A2C';
+                    tokenInput.style.borderBottomColor = '#424844';
+                    tokenInput.placeholder = 'Enter secure terminal key...';
                 }, 2000);
             }
+        }, 1000);
+    });
+
+    // Mouse movement dynamic parallax calculation for ambient layout nodes
+    document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 40;
+        const y = (e.clientY / window.innerHeight - 0.5) * 40;
+        
+        const lights = document.querySelectorAll('.ambient-light');
+        if(lights.length >= 2) {
+            lights[0].style.transform = `translate(${x}px, ${y}px)`;
+            lights[1].style.transform = `translate(${-x * 0.8}px, ${-y * 0.8}px)`;
         }
-    </script>
+    });
+</script>
 </body>
 </html>
